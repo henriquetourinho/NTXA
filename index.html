@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport para design responsivo -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Título atualizado para NTXA -->
+    <title>NTXA - Automação, Software e Servidores Linux</title>
+    
+    <!-- Descrição para SEO atualizada para NTXA -->
+    <meta name="description" content="Especialistas em automação com Go, Rust e Python. Garantimos a operação do seu servidor Linux com nosso bot exclusivo, o Autônomo Linux. Conheça a NTXA.">
+    
+    <!-- Carrega o Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Carrega a biblioteca de ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Configuração do Tailwind (opcional, mas bom para definir a fonte) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'ba-blue': '#007bff', // Um azul para a marca
+                        'ba-dark': '#0a192f', // Azul marinho escuro para o fundo
+                        'ba-light-blue': '#88c0d0', // Um azul claro para texto
+                        'ba-gray': '#a8b2d1', // Cinza claro para texto
+                    }
+                },
+            },
+        };
+    </script>
+    
+    <!-- Importa a fonte Inter do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Estilos CSS personalizados -->
+    <style>
+        /* Habilita o scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Garante que a fonte Inter seja aplicada */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f; /* Cor de fundo base 'ba-dark' */
+            color: #a8b2d1; /* Cor de texto base 'ba-gray' */
+        }
+
+        /* Efeito de brilho sutil nos ícones de serviço */
+        .service-icon:hover {
+            filter: drop-shadow(0 0 8px rgba(0, 123, 255, 0.6));
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        /* Estilo para os 'pills' de tecnologia */
+        .tech-pill {
+            display: inline-block;
+            background-color: rgba(100, 116, 139, 0.1); /* bg-slate-700/50 */
+            border: 1px solid #334155; /* border-slate-700 */
+            color: #cbd5e1; /* text-slate-300 */
+            padding: 0.5rem 1rem;
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* medium */
+            transition: all 0.2s ease;
+        }
+        .tech-pill:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            border-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="bg-ba-dark text-ba-gray">
+
+    <!-- 
+      HEADER / NAVEGAÇÃO 
+    -->
+    <header class="sticky top-0 z-50 w-full bg-ba-dark/80 backdrop-blur-md shadow-lg border-b border-gray-800">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                
+                <!-- Logo (com Ícone e Slogan) -->
+                <a href="#inicio" class="flex items-center gap-3 group">
+                    <!-- Ícone -->
+                    <i data-lucide="cpu" class="w-8 h-8 text-ba-blue transition-transform group-hover:rotate-6"></i> 
+                    
+                    <!-- Nome e Slogan -->
+                    <div class="flex flex-col">
+                        <!-- NOME ATUALIZADO -->
+                        <span class="text-xl font-bold text-white transition-colors group-hover:text-ba-blue">NTXA</span>
+                        <span class="text-xs font-light text-ba-gray tracking-wide">Software inteligente para processos eficientes.</span> 
+                    </div>
+                </a>
+                
+                <!-- Links do Menu (Desktop) -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#inicio" class="font-medium text-ba-gray hover:text-white transition-colors">Início</a>
+                    <a href="#servicos" class="font-medium text-ba-gray hover:text-white transition-colors">Serviços</a>
+                    <a href="#especialistas" class="font-medium text-ba-gray hover:text-white transition-colors">Especialistas</a>
+                    <a href="#tecnologias" class="font-medium text-ba-gray hover:text-white transition-colors">Tecnologias</a>
+                    <a href="#contato" class="font-medium text-ba-gray hover:text-white transition-colors">Contato</a>
+                    <!-- LINK WHATSAPP ATUALIZADO -->
+                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-ba-blue hover:bg-opacity-90 transition-colors">
+                        Fale Conosco
+                    </a>
+                </div>
+<!-- Botão Menu (Mobile) -->
+                <div class="md:hidden">
+                    <button id="menu-button" class="text-ba-gray hover:text-white" aria-label="Abrir menu">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Menu (Mobile) - Oculto por padrão -->
+        <div id="mobile-menu" class="hidden md:hidden bg-ba-dark shadow-xl absolute top-20 left-0 w-full">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a href="#inicio" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Início</a>
+                <a href="#servicos" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Serviços</a>
+                <a href="#especialistas" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Especialistas</a>
+                <a href="#tecnologias" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Tecnologias</a>
+                <a href="#contato" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Contato</a>
+                <!-- LINK WHATSAPP ATUALIZADO -->
+                <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="mt-2 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-ba-blue hover:bg-opacity-90 transition-colors">
+                    Fale Conosco
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main>
+
+        <!-- 
+          SEÇÃO HERO 
+        -->
+        <section id="inicio" class="min-h-screen flex items-center justify-center pt-20 pb-10 px-4">
+            <div class="max-w-4xl text-center">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+                    Automatize Seus Processos. <br class="hidden md:block">
+                    <span class="text-ba-blue">Otimize Seus Resultados.</span>
+                </h1>
+                <p class="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-ba-gray">
+                    Desenvolvemos <span class="text-white font-medium">sistemas web e de automação</span> sob medida,
+                    rodando exclusivamente em ambientes <span class="text-white font-medium">Linux/Unix</span>,
+                    reduzindo custos, eliminando erros e garantindo a <span class="text-white font-medium">operação contínua</span> do seu sistema.
+                </p>
+                <div class="mt-10">
+                    <!-- LINK WHATSAPP ATUALIZADO -->
+                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." 
+                       target="_blank" 
+                       class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i data-lucide="message-square" class="w-5 h-5 mr-2"></i>
+                        Solicitar Orçamento via WhatsApp
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+          SEÇÃO SERVIÇOS
+        -->
+        <section id="servicos" class="py-24 bg-ba-dark border-y border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Nossas Soluções</h2>
+                    <p class="mt-4 text-lg text-ba-gray">
+                        Soluções completas, do software à infraestrutura, focadas em performance e segurança.
+                    </p>
+                </div>
+                
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Card 1: Automação e Bots -->
+                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
+                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
+                            <i data-lucide="zap" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-white">Automação e Bots</h3>
+                        <p class="mt-3 text-base text-ba-gray">
+                            Software que executa tarefas, otimiza seu fluxo de trabalho e bots de comunicação eficientes para integrar suas operações.
+                        </p>
+                    </div>
+                    
+                    <!-- Card 2: Sistemas Web Sob Medida -->
+                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
+                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
+                            <i data-lucide="layout-template" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-white">Sistemas Web Sob Medida</h3>
+                        <p class="mt-3 text-base text-ba-gray">
+                            Criamos aplicações web customizadas, de painéis de controle a sistemas de gestão interna, focados em performance e usabilidade.
+                        </p>
+                    </div>
+                    
+                    <!-- Card 3: Gestão com Autônomo Linux -->
+                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
+                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
+                            <i data-lucide="bot" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-white">Gestão com Autônomo Linux</h3>
+                        <p class="mt-3 text-base text-ba-gray">
+                            Usamos nosso bot proprietário, o <span class="text-white">Autônomo Linux</span>, para monitorar e corrigir falhas do servidor em tempo real, garantindo máxima disponibilidade.
+                        </p>
+                    </div>
+
+                    <!-- Card 4: Redes e Criptografia -->
+                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
+                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-white">Redes e Criptografia</h3>
+                        <p class="mt-3 text-base text-ba-gray">
+Configuramos redes seguras e implementamos criptografia de ponta, do servidor aos dados, garantindo 'acesso zero' e proteção total.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+          SEÇÃO ESPECIALISTAS (Benefícios)
+        -->
+        <section id="especialistas" class="py-24 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                    <!-- Coluna de Imagem (Placeholder) -->
+                    <div class="w-full lg:w-1/2">
+                        <img src="https://placehold.co/600x450/0a192f/88c0d0?text=Autônomo+Linux+Bot" 
+                             alt="Ilustração do Autônomo Linux Bot monitorando servidores" 
+                             class="rounded-lg shadow-2xl object-cover w-full h-full border-4 border-gray-800">
+                    </div>
+                    
+                    <!-- Coluna de Texto -->
+                    <div class="w-full lg:w-1/2">
+                        <span class="text-sm font-bold uppercase text-ba-blue">Por que nos escolher?</span>
+                        <h2 class="mt-3 text-3xl md:text-4xl font-extrabold text-white">
+                            A base sólida para sua operação
+                        </h2>
+                        <p class="mt-5 text-lg text-ba-gray">
+                            Nossa especialização em gestão de ambientes Linux/Unix é a garantia de sua automação será construída sobre uma fundação estável. Usamos <span class="text-white">tecnologia proprietária</span> e parcerias estratégicas para gerenciar servidores de altíssima performance.
+                        </p>
+                        
+                        <ul class="mt-8 space-y-4">
+                            <!-- Benefício 1: Custos -->
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i data-lucide="trending-down" class="w-6 h-6 text-green-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-medium text-white">Redução de Custos</h4>
+                                    <p class="text-base text-ba-gray">Menos trabalho manual significa menos custos operacionais e mais lucratividade.</p>
+                                </div>
+                            </li>
+                            <!-- Benefício 2: Erros -->
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i data-lucide="target" class="w-6 h-6 text-green-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-medium text-white">Eliminação de Erros</h4>
+                                    <p class="text-base text-ba-gray">Automação executa tarefas com 100% de precisão, evitando falhas humanas.</p>
+                                </div>
+                            </li>
+                            <!-- Benefício 3: Escalabilidade -->
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i data-lucide="rocket" class="w-6 h-6 text-green-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-medium text-white">Otimização e Escalabilidade</h4>
+                                    <p class="text-base text-ba-gray">Sistemas que crescem com sua empresa, prontos para qualquer demanda.</p>
+                                </div>
+                            </li>
+                            <!-- Benefício 4: Segurança -->
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i data-lucide="shield-check" class="w-6 h-6 text-green-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-medium text-white">Segurança é Prioridade</h4>
+                                    <p class="text-base text-ba-gray">Implementamos criptografia de ponta, garantindo 'acesso zero' às suas informações.</p>
+                                </div>
+                            </li>
+                             <!-- Benefício 5: Tecnologia Exclusiva (NOVO) -->
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i data-lucide="bot" class="w-6 h-6 text-green-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-lg font-medium text-white">Tecnologia Exclusiva</h4>
+                                    <p class="text-base text-ba-gray">Temos acesso exclusivo ao 'Autônomo Linux' (de Carlos Henrique Tourinho Santana), um bot que audita e corrige ativamente seu servidor.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 
+          SEÇÃO TECNOLOGIAS
+        -->
+        <section id="tecnologias" class="py-24 bg-ba-dark border-t border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Tecnologias que Dominamos</h2>
+                    <p class="mt-4 text-lg text-ba-gray">
+                        Usamos as ferramentas certas para construir soluções robustas, seguras e escaláveis.
+                    </p>
+                </div>
+                
+                <div class="mt-16 flex flex-wrap justify-center items-center gap-x-6 gap-y-4">
+                    <span class="tech-pill">Go Lang</span>
+                    <span class="tech-pill">Rust Lang</span>
+                    <span class="tech-pill">Python</span>
+                    <span class="tech-pill">PHP</span>
+                    <span class="tech-pill">SQL</span>
+                    <span class="tech-pill">Shell / Bash</span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 
+          SEÇÃO DE CTA (CALL TO ACTION)
+          - *** EDITADO (v7): Email atualizado ***
+        -->
+        <section id="contato" class="py-20 bg-ba-blue text-white">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl md:text-4xl font-extrabold">
+                    Pronto para transformar sua empresa?
+                </h2>
+                <p class="mt-4 text-lg text-blue-100 max-w-2xl mx-auto">
+                    Vamos conversar sobre como nossa automação e monitoramento exclusivo podem otimizar seus processos. Entre em contato hoje mesmo, sem compromisso.
+                </p>
+                
+                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                    <!-- Botão WhatsApp -->
+                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." 
+                       target="_blank" 
+                       class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-ba-blue bg-white hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg">
+                        <i data-lucide="message-square" class="w-5 h-5 mr-2"></i>
+                        Iniciar via WhatsApp
+                    </a>
+                    
+                    <!-- Botão Email (LINK ATUALIZADO) -->
+                    <a href="mailto:contato@ntxa.xyz" 
+                       target="_blank"
+                       class="inline-flex items-center justify-center px-6 py-3 border border-blue-200 text-base font-medium rounded-lg text-white bg-ba-blue hover:bg-blue-800 transition-all transform hover:scale-105">
+                        <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
+                        Enviar um Email
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 
+      FOOTER
+      - *** EDITADO (v7): Email atualizado ***
+    -->
+    <footer class="py-12 bg-ba-dark border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
+                <!-- Copyright -->
+                <div class="text-sm text-ba-gray">
+                    &copy; <span id="current-year"></span> NTXA. Todos os direitos reservados.
+                </div>
+                
+                <!-- Contatos no Footer (LINKS ATUALIZADOS) -->
+                <div class="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-sm text-ba-gray">
+                    <a href="mailto:contato@ntxa.xyz" class="hover:text-white transition-colors">contato@ntxa.xyz</a>
+                    <a href="https://api.whatsapp.com/send?phone=5571992181226" class="hover:text-white transition-colors">(71) 99218-1226</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script>
+        // --- 1. Ativa os ícones do Lucide ---
+        lucide.createIcons();
+        
+        // --- 2. Lógica do Menu Mobile ---
+        const menuButton = document.getElementById('menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = menuButton.querySelector('i');
+        
+        // Alterna a visibilidade do menu e o ícone (Menu/X)
+        menuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.setAttribute('data-lucide', 'menu');
+            } else {
+                menuIcon.setAttribute('data-lucide', 'x');
+            }
+            lucide.createIcons(); // Recria o ícone
+        });
+        
+        // Fecha o menu ao clicar em um link
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            });
+        });
+
+        // --- 3. Define o ano atual no footer ---
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>
