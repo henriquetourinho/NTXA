@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>NXTA | A gente não usa. A gente cria. Engenharia de Software e IA</title>
-    <meta name="description" content="Engenharia extrema em Python, Go e Rust. Do servidor web proprietário (BrHTTP) à IA aplicada no Agro (DeméterOne) e Bio-Hacking (BioClock).">
-    <meta name="keywords" content="engenharia de software, inteligência artificial, servidores linux, python, go lang, rust, criptografia, redes seguras, nxta, salvador">
+    <meta name="description" content="Engenharia extrema em Python, Go e Rust. Do servidor web proprietário (BrHTTP) à IA aplicada no Agro (DeméterOne) e ferramentas forenses Linux (S.I.G.M.A).">
+    <meta name="keywords" content="engenharia de software, inteligência artificial, servidores linux, python, go lang, rust, criptografia, redes seguras, nxta, salvador, sigma linux, demeterone">
     <meta name="author" content="NXTA Engineering & Intelligence">
     <meta name="publisher" content="NXTA">
     <meta name="robots" content="index, follow, max-image-preview:large">
@@ -18,7 +18,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ntxa.xyz/">
     <meta property="og:locale" content="pt_BR">
-    <meta property="og:image" content="https://placehold.co/1200x630/020408/00d4ff?text=NXTA+Security+Engineering"> 
+    <meta property="og:image" content="https://placehold.co/1200x630/020408/00d4ff?text=NXTA+Engineering"> 
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NXTA: Engenharia de Software Extrema">
@@ -57,11 +57,13 @@
                         'nx-dark': '#020408',  // Preto Absoluto
                         'nx-panel': '#0b1121', // Fundo de Paineis
                         'nx-text': '#94a3b8',  // Texto Cinza
+                        // Cores dos Produtos
                         'demeter': '#10b981',  
                         'bioclock': '#f43f5e', 
                         'brhttp': '#f59e0b',   
-                        'markdown': '#8b5cf6', 
-                        'security': '#ef4444', // Vermelho para Segurança
+                        'markdown': '#8b5cf6',
+                        'sigma': '#ec4899',    // Pink/Magenta para S.I.G.M.A
+                        'security': '#ef4444', 
                     }
                 },
             },
@@ -178,8 +180,9 @@
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-demeter group">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-demeter group lg:col-span-2">
                         <div class="flex justify-between items-start mb-6">
                             <div class="w-14 h-14 bg-demeter/20 rounded-xl flex items-center justify-center text-demeter group-hover:scale-110 transition-transform">
                                 <i data-lucide="sprout" class="w-7 h-7"></i>
@@ -187,7 +190,9 @@
                             <span class="text-xs font-mono text-demeter px-2 py-1 bg-demeter/10 rounded border border-demeter/20">AGROTECH</span>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">DeméterOne</h3>
-                        <p class="text-slate-400 mb-8 leading-relaxed">O fim do "achismo" no campo. Plataforma completa de pecuária de precisão (Bovinos, Ovinos, Caprinos). Transformamos comportamento animal em dados de decisão.</p>
+                        <p class="text-slate-400 mb-6 leading-relaxed">
+                            O fim do "achismo" no campo. Plataforma completa de pecuária de precisão (Bovinos, Ovinos, Caprinos). Transformamos comportamento animal em dados de decisão.
+                        </p>
                         <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
                             <a href="http://demeterone.com.br/" target="_blank" class="text-white hover:text-demeter flex items-center gap-1 transition-colors">Site Oficial <i data-lucide="external-link" class="w-3 h-3"></i></a>
                             <a href="http://beta.demeterone.com.br/" target="_blank" class="text-slate-500 hover:text-white transition-colors">Versão Beta</a>
@@ -202,9 +207,27 @@
                             <span class="text-xs font-mono text-bioclock px-2 py-1 bg-bioclock/10 rounded border border-bioclock/20">BIO-HACKING</span>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">BioClock</h3>
-                        <p class="text-slate-400 mb-8 leading-relaxed">Biologia Digital e Cronobiologia. Um sistema que utiliza algoritmos para monitorar fases metabólicas e alinhar sua rotina ao seu código genético.</p>
+                        <p class="text-slate-400 mb-6 leading-relaxed">Biologia Digital e Cronobiologia. Algoritmos que monitoram fases metabólicas e alinham sua rotina ao seu código genético.</p>
                         <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
                             <a href="http://bioclock.ntxa.xyz/" target="_blank" class="text-white hover:text-bioclock flex items-center gap-1 transition-colors">Acessar Sistema <i data-lucide="external-link" class="w-3 h-3"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-sigma group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 bg-sigma/20 rounded-xl flex items-center justify-center text-sigma group-hover:scale-110 transition-transform">
+                                <i data-lucide="search-check" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-mono text-sigma px-2 py-1 bg-sigma/10 rounded border border-sigma/20">FORENSICS & DATA</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">S.I.G.M.A.</h3>
+                        <p class="text-slate-400 mb-6 leading-relaxed">
+                            Sistema Inteligente de Gerenciamento e Mapeamento de Arquivos. Uma GUI Linux avançada (PySide6) para investigação profunda de metadados.
+                        </p>
+                        <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
+                            <a href="https://github.com/henriquetourinho/S.I.G.M.A" target="_blank" class="text-white hover:text-sigma flex items-center gap-1 transition-colors">
+                                GitHub Repo <i data-lucide="github" class="w-3 h-3"></i>
+                            </a>
                         </div>
                     </div>
 
@@ -216,9 +239,9 @@
                             <span class="text-xs font-mono text-brhttp px-2 py-1 bg-brhttp/10 rounded border border-brhttp/20">INFRAESTRUTURA</span>
                         </div>
                         <h3 class="text-2xl font-bold text-white mb-3">BrHTTP</h3>
-                        <p class="text-slate-400 mb-8 leading-relaxed">Prova de que a NXTA não apenas usa, mas cria. Um servidor web robusto e proprietário, desenvolvido do zero para competir em performance e segurança.</p>
+                        <p class="text-slate-400 mb-6 leading-relaxed">Servidor web robusto e proprietário. Desenvolvido do zero para competir em performance, segurança e soberania de dados.</p>
                         <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
-                            <a href="https://henriquetourinho.github.io/brhttp/" target="_blank" class="text-white hover:text-brhttp flex items-center gap-1 transition-colors">Ver Documentação <i data-lucide="code" class="w-3 h-3"></i></a>
+                            <a href="https://henriquetourinho.github.io/brhttp/" target="_blank" class="text-white hover:text-brhttp flex items-center gap-1 transition-colors">Ver Docs <i data-lucide="code" class="w-3 h-3"></i></a>
                         </div>
                     </div>
 
@@ -229,12 +252,13 @@
                             </div>
                             <span class="text-xs font-mono text-markdown px-2 py-1 bg-markdown/10 rounded border border-markdown/20">OPEN SOURCE</span>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-3">Markdown Brasil</h3>
-                        <p class="text-slate-400 mb-8 leading-relaxed">Contribuição para a comunidade de desenvolvimento. Padronização e facilitação da escrita técnica para desenvolvedores brasileiros.</p>
+                        <h3 class="text-2xl font-bold text-white mb-3">Markdown BR</h3>
+                        <p class="text-slate-400 mb-6 leading-relaxed">Contribuição para a padronização da documentação técnica no Brasil. Ferramentas e guias para desenvolvedores.</p>
                         <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
-                            <a href="https://henriquetourinho.github.io/Markdown-Brasil/" target="_blank" class="text-white hover:text-markdown flex items-center gap-1 transition-colors">GitHub Project <i data-lucide="github" class="w-3 h-3"></i></a>
+                            <a href="https://henriquetourinho.github.io/Markdown-Brasil/" target="_blank" class="text-white hover:text-markdown flex items-center gap-1 transition-colors">Acessar <i data-lucide="github" class="w-3 h-3"></i></a>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -263,9 +287,9 @@
                         <span class="text-xs text-slate-500 mt-1">Alta Performance</span>
                     </div>
                     <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
-                        <i data-lucide="settings" class="w-10 h-10 text-orange-500 mb-4 group-hover:-translate-y-1 transition-transform"></i>
-                        <span class="font-bold text-white">Rust</span>
-                        <span class="text-xs text-slate-500 mt-1">Segurança de Memória</span>
+                        <i data-lucide="monitor" class="w-10 h-10 text-sigma mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">GUI Desktop</span>
+                        <span class="text-xs text-slate-500 mt-1">PySide6 / Qt</span>
                     </div>
                     <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
                         <i data-lucide="terminal" class="w-10 h-10 text-green-500 mb-4 group-hover:-translate-y-1 transition-transform"></i>
