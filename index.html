@@ -2,22 +2,60 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <!-- Viewport para design responsivo -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Título atualizado para NTXA -->
-    <title>NTXA - Automação, Software e Servidores Linux</title>
-    
-    <!-- Descrição para SEO atualizada para NTXA -->
-    <meta name="description" content="Especialistas em automação com Go, Rust e Python. Garantimos a operação do seu servidor Linux com nosso bot exclusivo, o Autônomo Linux. Conheça a NTXA.">
-    
-    <!-- Carrega o Tailwind CSS -->
+    <title>NXTA | A gente não usa. A gente cria. Engenharia de Software e IA</title>
+
+    <meta name="description" content="Engenharia extrema em Python, Go e Rust. Do servidor web proprietário (BrHTTP) à IA aplicada no Agro (DeméterOne) e Bio-Hacking (BioClock). A NXTA desenvolve o futuro.">
+
+    <meta name="keywords" content="engenharia de software, inteligência artificial, servidores linux, python, go lang, rust, automação, bio-hacking, agrotech, desenvolvimento web, infraestrutura de redes, brhttp, demeterone, bioclock, nxta, software house salvador">
+
+    <meta name="author" content="NXTA Engineering & Intelligence">
+    <meta name="publisher" content="NXTA">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="canonical" href="https://ntxa.xyz/">
+
+    <meta property="og:site_name" content="NXTA - Future First">
+    <meta property="og:title" content="NXTA: A gente não usa. A gente cria.">
+    <meta property="og:description" content="Não dependemos de ferramentas padrão. Criamos nossos próprios servidores, bots e IAs. Conheça a engenharia por trás do DeméterOne e BioClock.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ntxa.xyz/">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:image" content="https://placehold.co/1200x630/020408/00d4ff?text=NXTA+Engineering"> 
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NXTA: Engenharia de Software Extrema">
+    <meta name="twitter:description" content="Do Bit ao Bio. Desenvolvemos servidores, protocolos e inteligência artificial proprietária.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "NXTA",
+      "alternateName": "NXTA Engineering",
+      "url": "https://ntxa.xyz",
+      "slogan": "A gente não usa. A gente cria.",
+      "description": "Empresa de desenvolvimento de software de alta performance, especializada em infraestrutura proprietária, inteligência artificial e soluções verticais.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Salvador",
+        "addressRegion": "BA",
+        "addressCountry": "BR"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+55-71-99218-1226",
+        "contactType": "sales",
+        "email": "contato@ntxa.xyz"
+      },
+      "taxID": "59.230.549/0001-15"
+    }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Carrega a biblioteca de ícones Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- Configuração do Tailwind (opcional, mas bom para definir a fonte) -->
     <script>
         tailwind.config = {
             theme: {
@@ -26,342 +64,282 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        'ba-blue': '#007bff', // Um azul para a marca
-                        'ba-dark': '#0a192f', // Azul marinho escuro para o fundo
-                        'ba-light-blue': '#88c0d0', // Um azul claro para texto
-                        'ba-gray': '#a8b2d1', // Cinza claro para texto
+                        'nx-brand': '#00d4ff', // Azul Neon Principal
+                        'nx-dark': '#020408',  // Preto Absoluto
+                        'nx-panel': '#0b1121', // Fundo de Paineis
+                        'nx-text': '#94a3b8',  // Texto Cinza
+                        // Cores dos Produtos
+                        'demeter': '#10b981',  
+                        'bioclock': '#f43f5e', 
+                        'brhttp': '#f59e0b',   
+                        'markdown': '#8b5cf6', 
                     }
                 },
             },
         };
     </script>
     
-    <!-- Importa a fonte Inter do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Estilos CSS personalizados -->
     <style>
-        /* Habilita o scroll suave */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Garante que a fonte Inter seja aplicada */
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0a192f; /* Cor de fundo base 'ba-dark' */
-            color: #a8b2d1; /* Cor de texto base 'ba-gray' */
+            background-color: #020408;
+            color: #94a3b8;
         }
 
-        /* Efeito de brilho sutil nos ícones de serviço */
-        .service-icon:hover {
-            filter: drop-shadow(0 0 8px rgba(0, 123, 255, 0.6));
-            transform: scale(1.05);
-            transition: all 0.3s ease;
+        /* Efeitos de Vidro e Paineis */
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
-        /* Estilo para os 'pills' de tecnologia */
-        .tech-pill {
-            display: inline-block;
-            background-color: rgba(100, 116, 139, 0.1); /* bg-slate-700/50 */
-            border: 1px solid #334155; /* border-slate-700 */
-            color: #cbd5e1; /* text-slate-300 */
-            padding: 0.5rem 1rem;
-            border-radius: 9999px; /* rounded-full */
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500; /* medium */
-            transition: all 0.2s ease;
+        
+        .project-card {
+            transition: all 0.3s ease-out;
         }
-        .tech-pill:hover {
-            background-color: rgba(0, 123, 255, 0.1);
-            border-color: #007bff;
-            color: #fff;
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Grid de Fundo Tecnológico */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+        
+        /* Animação de Texto Gradiente */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
 
-<body class="bg-ba-dark text-ba-gray">
+<body class="bg-nx-dark text-nx-text relative selection:bg-nx-brand selection:text-nx-dark">
 
-    <!-- 
-      HEADER / NAVEGAÇÃO 
-    -->
-    <header class="sticky top-0 z-50 w-full bg-ba-dark/80 backdrop-blur-md shadow-lg border-b border-gray-800">
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                
-                <!-- Logo (com Ícone e Slogan) -->
-                <a href="#inicio" class="flex items-center gap-3 group">
-                    <!-- Ícone -->
-                    <i data-lucide="cpu" class="w-8 h-8 text-ba-blue transition-transform group-hover:rotate-6"></i> 
-                    
-                    <!-- Nome e Slogan -->
-                    <div class="flex flex-col">
-                        <!-- NOME ATUALIZADO -->
-                        <span class="text-xl font-bold text-white transition-colors group-hover:text-ba-blue">NTXA</span>
-                        <span class="text-xs font-light text-ba-gray tracking-wide">Software inteligente para processos eficientes.</span> 
-                    </div>
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-9 h-9 bg-nx-brand rounded flex items-center justify-center text-black font-black text-xl shadow-[0_0_15px_rgba(0,212,255,0.4)] group-hover:shadow-[0_0_25px_rgba(0,212,255,0.6)] transition-all">N</div>
+                    <span class="text-xl font-bold text-white tracking-wider">NXTA</span>
                 </a>
                 
-                <!-- Links do Menu (Desktop) -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="#inicio" class="font-medium text-ba-gray hover:text-white transition-colors">Início</a>
-                    <a href="#servicos" class="font-medium text-ba-gray hover:text-white transition-colors">Serviços</a>
-                    <a href="#especialistas" class="font-medium text-ba-gray hover:text-white transition-colors">Especialistas</a>
-                    <a href="#tecnologias" class="font-medium text-ba-gray hover:text-white transition-colors">Tecnologias</a>
-                    <a href="#contato" class="font-medium text-ba-gray hover:text-white transition-colors">Contato</a>
-                    <!-- LINK WHATSAPP ATUALIZADO -->
-                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-ba-blue hover:bg-opacity-90 transition-colors">
-                        Fale Conosco
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#portfolio" class="text-sm font-medium hover:text-white transition-colors">Portfólio</a>
+                    <a href="#tech" class="text-sm font-medium hover:text-white transition-colors">Stack & Infra</a>
+                    <a href="#contato" class="px-5 py-2 rounded border border-nx-brand text-nx-brand text-sm font-bold hover:bg-nx-brand hover:text-black transition-all">
+                        Fale com a Engenharia
                     </a>
                 </div>
-<!-- Botão Menu (Mobile) -->
-                <div class="md:hidden">
-                    <button id="menu-button" class="text-ba-gray hover:text-white" aria-label="Abrir menu">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
+
+                <div class="md:hidden text-white cursor-pointer">
+                    <i data-lucide="menu"></i>
                 </div>
             </div>
         </nav>
-        
-        <!-- Menu (Mobile) - Oculto por padrão -->
-        <div id="mobile-menu" class="hidden md:hidden bg-ba-dark shadow-xl absolute top-20 left-0 w-full">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
-                <a href="#inicio" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Início</a>
-                <a href="#servicos" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Serviços</a>
-                <a href="#especialistas" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Especialistas</a>
-                <a href="#tecnologias" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Tecnologias</a>
-                <a href="#contato" class="menu-link block px-3 py-3 rounded-md text-base font-medium text-ba-gray hover:text-white hover:bg-gray-800 w-full text-center">Contato</a>
-                <!-- LINK WHATSAPP ATUALIZADO -->
-                <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" class="mt-2 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-ba-blue hover:bg-opacity-90 transition-colors">
-                    Fale Conosco
-                </a>
-            </div>
-        </div>
     </header>
 
-    <!-- Conteúdo Principal -->
-    <main>
+    <main class="relative z-10">
+        
+        <section class="min-h-screen flex items-center justify-center pt-20 px-4 relative overflow-hidden">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-nx-brand/5 rounded-full blur-[120px] -z-10"></div>
 
-        <!-- 
-          SEÇÃO HERO 
-        -->
-        <section id="inicio" class="min-h-screen flex items-center justify-center pt-20 pb-10 px-4">
-            <div class="max-w-4xl text-center">
-                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
-                    Automatize Seus Processos. <br class="hidden md:block">
-                    <span class="text-ba-blue">Otimize Seus Resultados.</span>
+            <div class="max-w-5xl text-center space-y-8">
+                
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-nx-brand mb-4">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    SYSTEMS ONLINE
+                </div>
+
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight">
+                    NXTA: A gente não usa.<br>
+                    <span class="text-gradient">A gente cria.</span>
                 </h1>
-                <p class="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-ba-gray">
-                    Desenvolvemos <span class="text-white font-medium">sistemas web e de automação</span> sob medida,
-                    rodando exclusivamente em ambientes <span class="text-white font-medium">Linux/Unix</span>,
-                    reduzindo custos, eliminando erros e garantindo a <span class="text-white font-medium">operação contínua</span> do seu sistema.
+                
+                <p class="text-lg md:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                    Não somos apenas integradores. Somos inventores. 
+                    Construímos tudo: do <strong class="text-white">servidor web proprietário</strong> que hospeda seus dados, até a <strong class="text-white">IA</strong> que gerencia seu rebanho ou sua biologia.
                 </p>
-                <div class="mt-10">
-                    <!-- LINK WHATSAPP ATUALIZADO -->
-                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." 
-                       target="_blank" 
-                       class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-green-600 hover:bg-green-700 transition-all transform hover:scale-105 shadow-lg">
-                        <i data-lucide="message-square" class="w-5 h-5 mr-2"></i>
-                        Solicitar Orçamento via WhatsApp
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                    <a href="#portfolio" class="px-8 py-4 bg-white text-black font-bold rounded hover:bg-gray-200 transition-all shadow-lg flex items-center justify-center gap-2">
+                        Ver Nossas Criações
+                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
+                    </a>
+                    <a href="https://api.whatsapp.com/send?phone=5571992181226" class="px-8 py-4 glass-panel text-white font-bold rounded hover:bg-white/10 transition-all border border-white/20">
+                        WhatsApp Engenharia
                     </a>
                 </div>
             </div>
         </section>
 
-        <!-- 
-          SEÇÃO SERVIÇOS
-        -->
-        <section id="servicos" class="py-24 bg-ba-dark border-y border-gray-800">
+        <section id="portfolio" class="py-24 bg-nx-dark">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Nossas Soluções</h2>
-                    <p class="mt-4 text-lg text-ba-gray">
-                        Soluções completas, do software à infraestrutura, focadas em performance e segurança.
+                <div class="mb-16 md:text-center">
+                    <h2 class="text-3xl font-bold text-white mb-4">O Ecosistema NXTA</h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto">
+                        Nossa tecnologia não tem fronteiras. Resolvemos problemas complexos na infraestrutura da internet, na saúde humana e na produção de alimentos.
                     </p>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-demeter group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 bg-demeter/20 rounded-xl flex items-center justify-center text-demeter group-hover:scale-110 transition-transform">
+                                <i data-lucide="sprout" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-mono text-demeter px-2 py-1 bg-demeter/10 rounded border border-demeter/20">AGROTECH</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">DeméterOne</h3>
+                        <p class="text-slate-400 mb-8 leading-relaxed">
+                            O fim do "achismo" no campo. Plataforma completa de pecuária de precisão (Bovinos, Ovinos, Caprinos). Transformamos comportamento animal em dados de decisão.
+                        </p>
+                        <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
+                            <a href="http://demeterone.com.br/" target="_blank" class="text-white hover:text-demeter flex items-center gap-1 transition-colors">
+                                Site Oficial <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </a>
+                            <a href="http://beta.demeterone.com.br/" target="_blank" class="text-slate-500 hover:text-white transition-colors">
+                                Versão Beta
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-bioclock group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 bg-bioclock/20 rounded-xl flex items-center justify-center text-bioclock group-hover:scale-110 transition-transform">
+                                <i data-lucide="activity" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-mono text-bioclock px-2 py-1 bg-bioclock/10 rounded border border-bioclock/20">BIO-HACKING</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">BioClock</h3>
+                        <p class="text-slate-400 mb-8 leading-relaxed">
+                            Biologia Digital e Cronobiologia. Um sistema que utiliza algoritmos para monitorar fases metabólicas e alinhar sua rotina ao seu código genético.
+                        </p>
+                        <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
+                            <a href="http://bioclock.ntxa.xyz/" target="_blank" class="text-white hover:text-bioclock flex items-center gap-1 transition-colors">
+                                Acessar Sistema <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-brhttp group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 bg-brhttp/20 rounded-xl flex items-center justify-center text-brhttp group-hover:scale-110 transition-transform">
+                                <i data-lucide="server" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-mono text-brhttp px-2 py-1 bg-brhttp/10 rounded border border-brhttp/20">INFRAESTRUTURA</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">BrHTTP</h3>
+                        <p class="text-slate-400 mb-8 leading-relaxed">
+                            Prova de que a NXTA não apenas usa, mas cria. Um servidor web robusto e proprietário, desenvolvido do zero para competir em performance e segurança.
+                        </p>
+                        <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
+                            <a href="https://henriquetourinho.github.io/brhttp/" target="_blank" class="text-white hover:text-brhttp flex items-center gap-1 transition-colors">
+                                Ver Documentação <i data-lucide="code" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="project-card glass-panel rounded-2xl p-8 border-t-4 border-markdown group">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-14 h-14 bg-markdown/20 rounded-xl flex items-center justify-center text-markdown group-hover:scale-110 transition-transform">
+                                <i data-lucide="file-text" class="w-7 h-7"></i>
+                            </div>
+                            <span class="text-xs font-mono text-markdown px-2 py-1 bg-markdown/10 rounded border border-markdown/20">OPEN SOURCE</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Markdown Brasil</h3>
+                        <p class="text-slate-400 mb-8 leading-relaxed">
+                            Contribuição para a comunidade de desenvolvimento. Padronização e facilitação da escrita técnica para desenvolvedores brasileiros.
+                        </p>
+                        <div class="flex gap-4 text-sm font-medium pt-4 border-t border-white/5">
+                            <a href="https://henriquetourinho.github.io/Markdown-Brasil/" target="_blank" class="text-white hover:text-markdown flex items-center gap-1 transition-colors">
+                                GitHub Project <i data-lucide="github" class="w-3 h-3"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="py-24 border-t border-white/5 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <span class="text-nx-brand font-bold tracking-widest text-sm uppercase">Full Stack Engineering</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mt-2 mb-12">Nós falamos a língua da máquina</h2>
                 
-                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Card 1: Automação e Bots -->
-                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
-                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
-                            <i data-lucide="zap" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="mt-6 text-xl font-bold text-white">Automação e Bots</h3>
-                        <p class="mt-3 text-base text-ba-gray">
-                            Software que executa tarefas, otimiza seu fluxo de trabalho e bots de comunicação eficientes para integrar suas operações.
-                        </p>
-                    </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
                     
-                    <!-- Card 2: Sistemas Web Sob Medida -->
-                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
-                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
-                            <i data-lucide="layout-template" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="mt-6 text-xl font-bold text-white">Sistemas Web Sob Medida</h3>
-                        <p class="mt-3 text-base text-ba-gray">
-                            Criamos aplicações web customizadas, de painéis de controle a sistemas de gestão interna, focados em performance e usabilidade.
-                        </p>
-                    </div>
-                    
-                    <!-- Card 3: Gestão com Autônomo Linux -->
-                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
-                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
-                            <i data-lucide="bot" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="mt-6 text-xl font-bold text-white">Gestão com Autônomo Linux</h3>
-                        <p class="mt-3 text-base text-ba-gray">
-                            Usamos nosso bot proprietário, o <span class="text-white">Autônomo Linux</span>, para monitorar e corrigir falhas do servidor em tempo real, garantindo máxima disponibilidade.
-                        </p>
+                    <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
+                        <i data-lucide="code-2" class="w-10 h-10 text-yellow-400 mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">Python</span>
+                        <span class="text-xs text-slate-500 mt-1">Automação & IA</span>
                     </div>
 
-                    <!-- Card 4: Redes e Criptografia -->
-                    <div class="bg-gray-800/50 p-8 rounded-xl shadow-2xl border border-gray-700 backdrop-blur-sm">
-                        <div class="service-icon w-12 h-12 flex items-center justify-center rounded-full bg-ba-blue text-white">
-                            <i data-lucide="shield-check" class="w-6 h-6"></i>
-                        </div>
-                        <h3 class="mt-6 text-xl font-bold text-white">Redes e Criptografia</h3>
-                        <p class="mt-3 text-base text-ba-gray">
-Configuramos redes seguras e implementamos criptografia de ponta, do servidor aos dados, garantindo 'acesso zero' e proteção total.
-                        </p>
+                    <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
+                        <i data-lucide="network" class="w-10 h-10 text-brhttp mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">Servidores</span>
+                        <span class="text-xs text-slate-500 mt-1">Proprietários (Criação)</span>
+                    </div>
+
+                    <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
+                        <i data-lucide="cpu" class="w-10 h-10 text-cyan-400 mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">Go Lang</span>
+                        <span class="text-xs text-slate-500 mt-1">Alta Performance</span>
+                    </div>
+
+                    <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
+                        <i data-lucide="settings" class="w-10 h-10 text-orange-500 mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">Rust</span>
+                        <span class="text-xs text-slate-500 mt-1">Segurança de Memória</span>
+                    </div>
+
+                    <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
+                        <i data-lucide="terminal" class="w-10 h-10 text-green-500 mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">Linux/Shell</span>
+                        <span class="text-xs text-slate-500 mt-1">Gestão de Kernel</span>
+                    </div>
+
+                    <div class="p-6 glass-panel rounded-xl flex flex-col items-center hover:bg-white/5 transition-all group">
+                        <i data-lucide="globe" class="w-10 h-10 text-purple-400 mb-4 group-hover:-translate-y-1 transition-transform"></i>
+                        <span class="font-bold text-white">Web Stack</span>
+                        <span class="text-xs text-slate-500 mt-1">JS / HTML / CSS</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 
-          SEÇÃO ESPECIALISTAS (Benefícios)
-        -->
-        <section id="especialistas" class="py-24 overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                    <!-- Coluna de Imagem (Placeholder) -->
-                    <div class="w-full lg:w-1/2">
-                        <img src="https://placehold.co/600x450/0a192f/88c0d0?text=Autônomo+Linux+Bot" 
-                             alt="Ilustração do Autônomo Linux Bot monitorando servidores" 
-                             class="rounded-lg shadow-2xl object-cover w-full h-full border-4 border-gray-800">
-                    </div>
-                    
-                    <!-- Coluna de Texto -->
-                    <div class="w-full lg:w-1/2">
-                        <span class="text-sm font-bold uppercase text-ba-blue">Por que nos escolher?</span>
-                        <h2 class="mt-3 text-3xl md:text-4xl font-extrabold text-white">
-                            A base sólida para sua operação
-                        </h2>
-                        <p class="mt-5 text-lg text-ba-gray">
-                            Nossa especialização em gestão de ambientes Linux/Unix é a garantia de sua automação será construída sobre uma fundação estável. Usamos <span class="text-white">tecnologia proprietária</span> e parcerias estratégicas para gerenciar servidores de altíssima performance.
-                        </p>
-                        
-                        <ul class="mt-8 space-y-4">
-                            <!-- Benefício 1: Custos -->
-                            <li class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i data-lucide="trending-down" class="w-6 h-6 text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h4 class="text-lg font-medium text-white">Redução de Custos</h4>
-                                    <p class="text-base text-ba-gray">Menos trabalho manual significa menos custos operacionais e mais lucratividade.</p>
-                                </div>
-                            </li>
-                            <!-- Benefício 2: Erros -->
-                            <li class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i data-lucide="target" class="w-6 h-6 text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h4 class="text-lg font-medium text-white">Eliminação de Erros</h4>
-                                    <p class="text-base text-ba-gray">Automação executa tarefas com 100% de precisão, evitando falhas humanas.</p>
-                                </div>
-                            </li>
-                            <!-- Benefício 3: Escalabilidade -->
-                            <li class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i data-lucide="rocket" class="w-6 h-6 text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h4 class="text-lg font-medium text-white">Otimização e Escalabilidade</h4>
-                                    <p class="text-base text-ba-gray">Sistemas que crescem com sua empresa, prontos para qualquer demanda.</p>
-                                </div>
-                            </li>
-                            <!-- Benefício 4: Segurança -->
-                            <li class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i data-lucide="shield-check" class="w-6 h-6 text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h4 class="text-lg font-medium text-white">Segurança é Prioridade</h4>
-                                    <p class="text-base text-ba-gray">Implementamos criptografia de ponta, garantindo 'acesso zero' às suas informações.</p>
-                                </div>
-                            </li>
-                             <!-- Benefício 5: Tecnologia Exclusiva (NOVO) -->
-                            <li class="flex items-start">
-                                <div class="flex-shrink-0">
-                                    <i data-lucide="bot" class="w-6 h-6 text-green-500"></i>
-                                </div>
-                                <div class="ml-3">
-                                    <h4 class="text-lg font-medium text-white">Tecnologia Exclusiva</h4>
-                                    <p class="text-base text-ba-gray">Temos acesso exclusivo ao 'Autônomo Linux' (de Carlos Henrique Tourinho Santana), um bot que audita e corrige ativamente seu servidor.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <section id="contato" class="py-20 relative overflow-hidden bg-gradient-to-b from-nx-dark to-black border-t border-white/5">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-nx-brand/5 rounded-full blur-[100px] -z-10"></div>
 
-        <!-- 
-          SEÇÃO TECNOLOGIAS
-        -->
-        <section id="tecnologias" class="py-24 bg-ba-dark border-t border-gray-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center max-w-2xl mx-auto">
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-white">Tecnologias que Dominamos</h2>
-                    <p class="mt-4 text-lg text-ba-gray">
-                        Usamos as ferramentas certas para construir soluções robustas, seguras e escaláveis.
-                    </p>
-                </div>
-                
-                <div class="mt-16 flex flex-wrap justify-center items-center gap-x-6 gap-y-4">
-                    <span class="tech-pill">Go Lang</span>
-                    <span class="tech-pill">Rust Lang</span>
-                    <span class="tech-pill">Python</span>
-                    <span class="tech-pill">PHP</span>
-                    <span class="tech-pill">SQL</span>
-                    <span class="tech-pill">Shell / Bash</span>
-                </div>
-            </div>
-        </section>
-
-
-        <!-- 
-          SEÇÃO DE CTA (CALL TO ACTION)
-          - *** EDITADO (v7): Email atualizado ***
-        -->
-        <section id="contato" class="py-20 bg-ba-blue text-white">
             <div class="max-w-4xl mx-auto px-4 text-center">
-                <h2 class="text-3xl md:text-4xl font-extrabold">
-                    Pronto para transformar sua empresa?
-                </h2>
-                <p class="mt-4 text-lg text-blue-100 max-w-2xl mx-auto">
-                    Vamos conversar sobre como nossa automação e monitoramento exclusivo podem otimizar seus processos. Entre em contato hoje mesmo, sem compromisso.
+                <h2 class="text-4xl font-bold text-white mb-6">Seu projeto exige criação real?</h2>
+                <p class="text-slate-300 mb-10 text-lg max-w-2xl mx-auto">
+                    Não vendemos templates. Nós desenhamos a arquitetura, codificamos os servidores e entregamos a solução completa. Fale com a NXTA.
                 </p>
                 
-                <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-                    <!-- Botão WhatsApp -->
-                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NTXA%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." 
-                       target="_blank" 
-                       class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-ba-blue bg-white hover:bg-blue-50 transition-all transform hover:scale-105 shadow-lg">
-                        <i data-lucide="message-square" class="w-5 h-5 mr-2"></i>
+                <div class="flex flex-col sm:flex-row gap-5 justify-center items-center">
+                    <a href="https://api.whatsapp.com/send?phone=5571992181226&text=Ol%C3%A1%2C%20visitei%20o%20site%20da%20NXTA%20e%20gostaria%20de%20falar%20sobre%20um%20projeto." 
+                       class="w-full sm:w-auto px-8 py-4 bg-nx-brand text-black font-bold rounded shadow-[0_0_20px_rgba(0,212,255,0.3)] hover:shadow-[0_0_40px_rgba(0,212,255,0.5)] transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="message-square" class="w-5 h-5"></i>
                         Iniciar via WhatsApp
                     </a>
-                    
-                    <!-- Botão Email (LINK ATUALIZADO) -->
                     <a href="mailto:contato@ntxa.xyz" 
-                       target="_blank"
-                       class="inline-flex items-center justify-center px-6 py-3 border border-blue-200 text-base font-medium rounded-lg text-white bg-ba-blue hover:bg-blue-800 transition-all transform hover:scale-105">
-                        <i data-lucide="mail" class="w-5 h-5 mr-2"></i>
-                        Enviar um Email
+                       class="w-full sm:w-auto px-8 py-4 border border-white/20 text-white font-bold rounded hover:bg-white/5 transition-all flex items-center justify-center gap-2">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        contato@ntxa.xyz
                     </a>
                 </div>
             </div>
@@ -369,60 +347,35 @@ Configuramos redes seguras e implementamos criptografia de ponta, do servidor ao
 
     </main>
 
-    <!-- 
-      FOOTER
-      - *** EDITADO (v7): Email atualizado ***
-    -->
-    <footer class="py-12 bg-ba-dark border-t border-gray-800">
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center text-center md:text-left space-y-4 md:space-y-0">
-                <!-- Copyright -->
-                <div class="text-sm text-ba-gray">
-                    &copy; <span id="current-year"></span> NTXA. Todos os direitos reservados.
-                </div>
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
                 
-                <!-- Contatos no Footer (LINKS ATUALIZADOS) -->
-                <div class="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-sm text-ba-gray">
-                    <a href="mailto:contato@ntxa.xyz" class="hover:text-white transition-colors">contato@ntxa.xyz</a>
-                    <a href="https://api.whatsapp.com/send?phone=5571992181226" class="hover:text-white transition-colors">(71) 99218-1226</a>
+                <div class="text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start gap-2 mb-2">
+                        <div class="w-6 h-6 bg-nx-brand rounded flex items-center justify-center text-black font-bold text-xs">N</div>
+                        <span class="font-bold text-white text-lg">NXTA</span>
+                    </div>
+                    <p class="text-slate-500 text-xs max-w-xs">
+                        Future First. Desenvolvimento de Software, Hardware Proprietário e Inteligência Artificial.
+                    </p>
+                </div>
+
+                <div class="text-slate-500 text-center md:text-right">
+                    <p class="mb-1">Salvador, Bahia - Brasil</p>
+                    <p class="font-mono text-xs text-slate-600 mb-4">CNPJ: 59.230.549/0001-15</p>
+                    <p class="text-xs">&copy; <span id="year"></span> NXTA. Todos os direitos reservados.</p>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts JavaScript -->
     <script>
-        // --- 1. Ativa os ícones do Lucide ---
+        // Inicializa ícones
         lucide.createIcons();
         
-        // --- 2. Lógica do Menu Mobile ---
-        const menuButton = document.getElementById('menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIcon = menuButton.querySelector('i');
-        
-        // Alterna a visibilidade do menu e o ícone (Menu/X)
-        menuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            if (mobileMenu.classList.contains('hidden')) {
-                menuIcon.setAttribute('data-lucide', 'menu');
-            } else {
-                menuIcon.setAttribute('data-lucide', 'x');
-            }
-            lucide.createIcons(); // Recria o ícone
-        });
-        
-        // Fecha o menu ao clicar em um link
-        document.querySelectorAll('.menu-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-                menuIcon.setAttribute('data-lucide', 'menu');
-                lucide.createIcons();
-            });
-        });
-
-        // --- 3. Define o ano atual no footer ---
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        // Ano Automático
+        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
-
 </body>
 </html>
