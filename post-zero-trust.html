@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Segurança Zero Trust no Organizando.me | NXTA Engineering Log</title>
+    <meta name="description" content="Como implementamos criptografia ponta-a-ponta e arquitetura Zero Trust para proteger dados financeiros críticos.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'nx-brand': '#00d4ff', 
+                        'nx-dark': '#020408',
+                        'nx-panel': '#0b1121',
+                        'nx-text': '#94a3b8',
+                        'accent': '#3b82f6', // AZUL (Fintech Theme)
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.nx-text'),
+                                h1: { color: '#fff' },
+                                h2: { color: '#fff' },
+                                strong: { color: '#fff' },
+                                code: { color: theme('colors.accent') },
+                            },
+                        },
+                    }),
+                },
+            },
+        };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020408;
+            color: #94a3b8;
+        }
+        
+        /* Syntax Highlighting Manual (Python Theme) */
+        .token-keyword { color: #c678dd; } /* def, return, import */
+        .token-class { color: #e5c07b; }   /* Fernet, Hasher */
+        .token-fn { color: #61afef; }      /* function names */
+        .token-string { color: #98c379; }  /* strings */
+        .token-comment { color: #5c6370; font-style: italic; }
+        .token-decorator { color: #d19a66; } /* @static... */
+        
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-nx-dark text-nx-text relative selection:bg-accent selection:text-white">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <div class="fixed top-0 left-0 h-1 bg-accent z-[60] w-0 transition-all duration-100" id="reading-progress"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="blog.html" class="flex items-center gap-2 group text-white hover:text-accent transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-bold text-sm tracking-wide">VOLTAR AO LOG</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-mono text-accent hidden sm:block">sec_ops@nxta:~/vault</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <header class="max-w-3xl mx-auto px-4 sm:px-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="px-3 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                    Fintech
+                </span>
+                <span class="text-slate-500 text-xs font-mono">20 NOV 2025</span>
+                <span class="text-slate-600 text-xs font-mono">•</span>
+                <span class="text-slate-500 text-xs font-mono">4 MIN READ</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
+                Segurança Zero Trust: <br>
+                Protegendo o <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-200">Organizando.me</span>.
+            </h1>
+
+            <div class="flex items-center gap-4 border-b border-white/5 pb-8">
+                <div class="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border-2 border-nx-dark ring-2 ring-white/10">
+                    <img src="https://github.com/henriquetourinho.png" alt="Henrique Tourinho" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="text-white font-bold text-sm">Henrique Tourinho</p>
+                    <p class="text-slate-500 text-xs font-mono">CTO & Founder @ NXTA</p>
+                </div>
+            </div>
+        </header>
+
+        <article class="max-w-3xl mx-auto px-4 sm:px-6 text-lg leading-relaxed space-y-8">
+            
+            <p>
+                Dados financeiros não são apenas números em um banco de dados. Eles representam o sustento, os sonhos e a estabilidade de uma família. No desenvolvimento do <strong>Organizando.me</strong>, adotamos uma postura radical: tratar cada dado como se a rede já estivesse comprometida.
+            </p>
+            <p>
+                O modelo de segurança tradicional (o "castelo com fosso") morreu. Hoje, operamos sob a filosofia de <strong class="text-white">Zero Trust</strong>: Nunca confie, sempre verifique.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Criptografia em Repouso (At Rest)</h2>
+            <p>
+                Muitas aplicações criptografam apenas a senha. Isso é insuficiente. Se um atacante obtiver acesso ao banco de dados, ele não deve ser capaz de ler quanto dinheiro você tem ou onde você gastou.
+            </p>
+            <p>
+                Utilizamos <strong>AES-256</strong> para criptografar campos sensíveis (saldos, nomes de transações) antes mesmo de eles tocarem o disco do banco de dados. A chave de descriptografia nunca é armazenada junto com os dados.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Implementação Técnica</h2>
+            <p>
+                Abaixo, um exemplo simplificado da nossa classe de criptografia em Python, utilizando a biblioteca <code>cryptography</code>. Note que a rotação de chaves é mandatória.
+            </p>
+
+            <div class="rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/10 my-8 shadow-2xl font-mono text-sm">
+                <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5">
+                    <span class="text-xs text-slate-400">security/vault.py</span>
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                </div>
+                <div class="p-6 overflow-x-auto">
+<pre><code><span class="token-keyword">from</span> cryptography.fernet <span class="token-keyword">import</span> Fernet
+<span class="token-keyword">import</span> os
+
+<span class="token-keyword">class</span> <span class="token-class">FinancialVault</span>:
+    <span class="token-keyword">def</span> <span class="token-fn">__init__</span>(self):
+        <span class="token-comment"># Chave carregada de Variável de Ambiente Segura (Vault)</span>
+        self.key = os.getenv(<span class="token-string">'NXTA_MASTER_KEY'</span>)
+        self.cipher = Fernet(self.key)
+
+    <span class="token-keyword">def</span> <span class="token-fn">encrypt_transaction</span>(self, amount: str) -> bytes:
+        <span class="token-comment"># Dados são convertidos para bytes antes de cifrar</span>
+        <span class="token-keyword">return</span> self.cipher.encrypt(amount.encode())
+
+    <span class="token-keyword">def</span> <span class="token-fn">decrypt_transaction</span>(self, token: bytes) -> str:
+        <span class="token-keyword">try</span>:
+            <span class="token-keyword">return</span> self.cipher.decrypt(token).decode()
+        <span class="token-keyword">except</span> Exception <span class="token-keyword">as</span> e:
+            <span class="token-comment"># Log de tentativa de violação de integridade</span>
+            SecurityLogger.alert(<span class="token-string">f"Decryption failed: {e}"</span>)
+            <span class="token-keyword">raise</span> AccessDeniedError()</code></pre>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Autenticação e Sessão</h2>
+            <p>
+                Não usamos JWTs simples. Implementamos <strong>Sessões Opacas</strong> com rotação automática. Se detectarmos uma mudança anômala de IP ou User-Agent, a sessão é invalidada imediatamente e o usuário deve reautenticar via MFA (Autenticação Multifator).
+            </p>
+            <blockquote class="border-l-4 border-accent pl-6 py-2 my-8 bg-accent/5 italic text-slate-300">
+                "Conveniência não pode custar segurança. Preferimos pedir o login novamente a arriscar uma sessão sequestrada."
+            </blockquote>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Auditoria Imutável</h2>
+            <p>
+                Cada ação sensível (transferência, exclusão de conta) gera um log de auditoria assinado criptograficamente. Isso impede que, mesmo um administrador do sistema, altere o histórico de ações para cobrir rastros.
+            </p>
+            <p>
+                Essa é a engenharia da NXTA: Paranóia construtiva para garantir a paz de espírito dos nossos usuários.
+            </p>
+
+            <div class="pt-12 mt-12 border-t border-white/10">
+                <h4 class="text-xs font-bold text-slate-500 uppercase mb-4">Tags Relacionadas</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#CyberSec</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Fintech</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Cryptography</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#ZeroTrust</span>
+                </div>
+            </div>
+
+        </article>
+
+        <section class="max-w-3xl mx-auto px-4 mt-20">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 text-center border border-accent/20 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Construindo uma Fintech?</h3>
+                <p class="text-slate-400 mb-8">
+                    Aprenda mais sobre padrões de segurança bancária e arquitetura de dados resiliente.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <input type="email" placeholder="seu@email.com" class="bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent w-full sm:w-auto">
+                    <button class="bg-accent text-white font-bold px-6 py-3 rounded-lg hover:bg-white hover:text-accent transition-colors">
+                        Inscrever
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-white block mb-1">NXTA Engineering</span>
+                <span class="text-slate-500">Salvador, Bahia.</span>
+            </div>
+            
+            <div class="text-slate-500 text-center md:text-right">
+                <p>&copy; 2025 NXTA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Reading Progress Bar Logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("reading-progress").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>

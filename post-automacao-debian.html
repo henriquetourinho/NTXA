@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Automação Debian com Shell | NXTA Engineering Log</title>
+    <meta name="description" content="Scripts essenciais que todo SysAdmin deve ter. Como reduzimos o tempo de setup de servidores de horas para minutos usando Bash.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'nx-brand': '#00d4ff', 
+                        'nx-dark': '#020408',
+                        'nx-panel': '#0b1121',
+                        'nx-text': '#94a3b8',
+                        'accent': '#f59e0b', // AMBER (Infra/Linux Theme)
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.nx-text'),
+                                h1: { color: '#fff' },
+                                h2: { color: '#fff' },
+                                strong: { color: '#fff' },
+                                code: { color: theme('colors.accent') },
+                            },
+                        },
+                    }),
+                },
+            },
+        };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020408;
+            color: #94a3b8;
+        }
+        
+        /* Syntax Highlighting Manual (Bash Theme) */
+        .token-comment { color: #5c6370; font-style: italic; }
+        .token-command { color: #61afef; font-weight: bold; } /* apt-get, echo */
+        .token-var { color: #e06c75; }      /* $USER */
+        .token-string { color: #98c379; }   /* "text" */
+        .token-operator { color: #56b6c2; } /* &&, |, > */
+        .token-flag { color: #d19a66; }     /* -y, --upgrade */
+        
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-nx-dark text-nx-text relative selection:bg-accent selection:text-black">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <div class="fixed top-0 left-0 h-1 bg-accent z-[60] w-0 transition-all duration-100" id="reading-progress"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="blog.html" class="flex items-center gap-2 group text-white hover:text-accent transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-bold text-sm tracking-wide">VOLTAR AO LOG</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-mono text-accent hidden sm:block">root@nxta-server:~#</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <header class="max-w-3xl mx-auto px-4 sm:px-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="px-3 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                    Linux
+                </span>
+                <span class="text-slate-500 text-xs font-mono">01 NOV 2025</span>
+                <span class="text-slate-600 text-xs font-mono">•</span>
+                <span class="text-slate-500 text-xs font-mono">10 MIN READ</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
+                Automação de Servidores: <br>
+                Do zero ao deploy em <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-yellow-200">Shell Script</span>.
+            </h1>
+
+            <div class="flex items-center gap-4 border-b border-white/5 pb-8">
+                <div class="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border-2 border-nx-dark ring-2 ring-white/10">
+                    <img src="https://github.com/henriquetourinho.png" alt="Henrique Tourinho" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="text-white font-bold text-sm">Henrique Tourinho</p>
+                    <p class="text-slate-500 text-xs font-mono">CTO & Founder @ NXTA</p>
+                </div>
+            </div>
+        </header>
+
+        <article class="max-w-3xl mx-auto px-4 sm:px-6 text-lg leading-relaxed space-y-8">
+            
+            <p>
+                Existe uma regra de ouro na administração de sistemas: <strong class="text-white">Se você precisa digitar o mesmo comando três vezes, automatize.</strong>
+            </p>
+            <p>
+                Ferramentas modernas como Ansible, Terraform e Kubernetes são incríveis. Mas elas adicionam complexidade. Na NXTA, nós amamos a simplicidade brutal do Bash. Para provisionar um novo nó de processamento para o <strong>DeméterOne</strong> ou um servidor de borda, usamos scripts que rodam em qualquer Debian "vanilla".
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">A Filosofia da Idempotência</h2>
+            <p>
+                Um bom script de automação não pode apenas "rodar". Ele deve ser <strong>idempotente</strong>. Isso significa que você pode executá-lo 1, 10 ou 100 vezes, e o resultado final será sempre o mesmo, sem quebrar configurações existentes ou duplicar arquivos.
+            </p>
+            <blockquote class="border-l-4 border-accent pl-6 py-2 my-8 bg-accent/5 italic text-slate-300">
+                "Shell script não é apenas colar comandos em um arquivo. É lógica de estado, tratamento de erros e garantia de consistência."
+            </blockquote>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">O Script de "Bootstrap" NXTA</h2>
+            <p>
+                Abaixo está uma versão higienizada do script que usamos para preparar um servidor Debian 12 recém-instalado. Ele atualiza o sistema, instala ferramentas base, configura o firewall e blinda o SSH.
+            </p>
+
+            <div class="rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/10 my-8 shadow-2xl font-mono text-sm">
+                <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5">
+                    <span class="text-xs text-slate-400">setup-server.sh</span>
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                </div>
+                <div class="p-6 overflow-x-auto">
+<pre><code><span class="token-comment">#!/bin/bash</span>
+<span class="token-comment"># NXTA Server Bootstrap - Debian 12</span>
+<span class="token-comment"># Encerra o script se qualquer comando falhar</span>
+<span class="token-command">set</span> <span class="token-flag">-e</span>
+
+<span class="token-var">NEW_USER</span>=<span class="token-string">"nxta_admin"</span>
+<span class="token-var">SSH_PORT</span>=22022
+
+<span class="token-command">echo</span> <span class="token-string">"[+] Atualizando Repositórios..."</span>
+<span class="token-command">apt-get</span> update <span class="token-operator">&&</span> <span class="token-command">apt-get</span> upgrade <span class="token-flag">-y</span>
+
+<span class="token-command">echo</span> <span class="token-string">"[+] Instalando Ferramentas Base..."</span>
+<span class="token-command">apt-get</span> install <span class="token-flag">-y</span> curl git htop ufw fail2ban vim net-tools
+
+<span class="token-command">echo</span> <span class="token-string">"[+] Configurando Firewall (UFW)..."</span>
+<span class="token-comment"># Libera portas essenciais antes de ativar</span>
+<span class="token-command">ufw</span> allow <span class="token-var">$SSH_PORT</span>/tcp
+<span class="token-command">ufw</span> allow 80/tcp
+<span class="token-command">ufw</span> allow 443/tcp
+<span class="token-command">ufw</span> <span class="token-flag">--force</span> enable
+
+<span class="token-command">echo</span> <span class="token-string">"[+] Blindando SSH..."</span>
+<span class="token-comment"># Altera porta e proíbe login de root</span>
+<span class="token-command">sed</span> <span class="token-flag">-i</span> <span class="token-string">"s/#Port 22/Port $SSH_PORT/"</span> /etc/ssh/sshd_config
+<span class="token-command">sed</span> <span class="token-flag">-i</span> <span class="token-string">"s/PermitRootLogin yes/PermitRootLogin no/"</span> /etc/ssh/sshd_config
+<span class="token-command">systemctl</span> restart ssh
+
+<span class="token-command">echo</span> <span class="token-string">"[OK] Servidor provisionado com sucesso."</span>
+</code></pre>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Por que Debian?</h2>
+            <p>
+                Estabilidade é chata, e nós amamos isso. Em produção, você não quer surpresas. O ciclo de release do Debian e sua gestão de pacotes (`apt`) são previsíveis. 
+            </p>
+            <p>
+                Quando você roda um script desses em 50 servidores, você sabe que todos terminarão no mesmo estado. Essa confiança é a base sobre a qual construímos produtos complexos como o <strong>BrHTTP</strong>.
+            </p>
+
+            <div class="pt-12 mt-12 border-t border-white/10">
+                <h4 class="text-xs font-bold text-slate-500 uppercase mb-4">Tags Relacionadas</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Linux</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Debian</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Bash</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#DevOps</span>
+                </div>
+            </div>
+
+        </article>
+
+        <section class="max-w-3xl mx-auto px-4 mt-20">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 text-center border border-accent/20 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Quer aprender SysAdmin raiz?</h3>
+                <p class="text-slate-400 mb-8">
+                    Compartilhamos nossos dotfiles e scripts de automação na newsletter.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <input type="email" placeholder="seu@email.com" class="bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent w-full sm:w-auto">
+                    <button class="bg-accent text-black font-bold px-6 py-3 rounded-lg hover:bg-white transition-colors">
+                        Inscrever
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-white block mb-1">NXTA Engineering</span>
+                <span class="text-slate-500">Salvador, Bahia.</span>
+            </div>
+            
+            <div class="text-slate-500 text-center md:text-right">
+                <p>&copy; 2025 NXTA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Reading Progress Bar Logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("reading-progress").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>

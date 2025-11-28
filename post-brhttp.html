@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>A Morte do Nginx? | NXTA Engineering Log</title>
+    <meta name="description" content="Por que a NXTA decidiu reescrever a camada de servidor web em Go, abandonando o padrão da indústria em busca de soberania.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'nx-brand': '#00d4ff', 
+                        'nx-dark': '#020408',
+                        'nx-panel': '#0b1121',
+                        'nx-text': '#94a3b8',
+                        'accent': '#f59e0b', // Laranja do BrHTTP
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.nx-text'),
+                                h1: { color: '#fff' },
+                                h2: { color: '#fff' },
+                                strong: { color: '#fff' },
+                                code: { color: theme('colors.accent') },
+                            },
+                        },
+                    }),
+                },
+            },
+        };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020408;
+            color: #94a3b8;
+        }
+        
+        /* Syntax Highlighting Manual para o exemplo */
+        .token-keyword { color: #c678dd; }
+        .token-func { color: #61afef; }
+        .token-string { color: #98c379; }
+        .token-comment { color: #5c6370; font-style: italic; }
+        
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-nx-dark text-nx-text relative selection:bg-accent selection:text-black">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <div class="fixed top-0 left-0 h-1 bg-accent z-[60] w-0 transition-all duration-100" id="reading-progress"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="blog.html" class="flex items-center gap-2 group text-white hover:text-accent transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-bold text-sm tracking-wide">VOLTAR AO LOG</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-mono text-accent hidden sm:block">sys_admin@nxta:~/projects/brhttp</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <header class="max-w-3xl mx-auto px-4 sm:px-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="px-3 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                    Infraestrutura
+                </span>
+                <span class="text-slate-500 text-xs font-mono">28 NOV 2025</span>
+                <span class="text-slate-600 text-xs font-mono">•</span>
+                <span class="text-slate-500 text-xs font-mono">8 MIN READ</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
+                A Morte do Nginx? <br>
+                Por que criamos o <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-yellow-200">BrHTTP</span> do zero em Go.
+            </h1>
+
+            <div class="flex items-center gap-4 border-b border-white/5 pb-8">
+                <div class="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border-2 border-nx-dark ring-2 ring-white/10">
+                    <img src="https://github.com/henriquetourinho.png" alt="Henrique Tourinho" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="text-white font-bold text-sm">Henrique Tourinho</p>
+                    <p class="text-slate-500 text-xs font-mono">CTO & Founder @ NXTA</p>
+                </div>
+            </div>
+        </header>
+
+        <article class="max-w-3xl mx-auto px-4 sm:px-6 text-lg leading-relaxed space-y-8">
+            
+            <p>
+                <strong class="text-white">Dependência é dívida técnica.</strong> Quando você constrói toda a sua infraestrutura baseada em ferramentas que você não controla, você está alugando o terreno onde constrói seu castelo.
+            </p>
+            <p>
+                O Nginx é uma peça incrível de engenharia. Ele alimenta a maior parte da web. Mas na <span class="text-white font-bold">NXTA</span>, nosso lema é claro: <em>"A gente não usa. A gente cria."</em>
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">O Problema do "Canivete Suíço"</h2>
+            <p>
+                Servidores web genéricos como Apache e Nginx são projetados para atender a todos. Eles precisam servir PHP, fazer proxy reverso, balancear carga, servir arquivos estáticos e lidar com milhares de módulos legados.
+            </p>
+            <blockquote class="border-l-4 border-accent pl-6 py-2 my-8 bg-accent/5 italic text-slate-300">
+                "Software genérico é otimizado para a média. Nós precisávamos de otimização para a borda."
+            </blockquote>
+            <p>
+                Precisávamos de algo que integrasse nativamente com nossas soluções de segurança (Criptografia Zero Trust) e que pudesse ser modificado em nível de código para comportar as demandas específicas do <strong>DeméterOne</strong> (IoT rural) e do <strong>BioClock</strong>.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">A Escolha do Go (Golang)</h2>
+            <p>
+                Rust foi considerado, mas Go venceu pela simplicidade da concorrência. O modelo de <em>Goroutines</em> nos permite lidar com milhares de conexões simultâneas com uma pegada de memória ridícula.
+            </p>
+            <p>
+                Abaixo, um exemplo simplificado de como o BrHTTP gerencia middlewares de segurança nativa, algo que exigiria configurações complexas de Lua no Nginx:
+            </p>
+
+            <div class="rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/10 my-8 shadow-2xl font-mono text-sm">
+                <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5">
+                    <span class="text-xs text-slate-400">server/middleware.go</span>
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                </div>
+                <div class="p-6 overflow-x-auto">
+<pre><code><span class="token-keyword">package</span> main
+
+<span class="token-keyword">import</span> (
+    <span class="token-string">"net/http"</span>
+    <span class="token-string">"nxta/security"</span>
+)
+
+<span class="token-comment">// SecurityHeader força criptografia proprietária NXTA</span>
+<span class="token-keyword">func</span> <span class="token-func">SecurityHeader</span>(next http.Handler) http.Handler {
+    <span class="token-keyword">return</span> http.<span class="token-func">HandlerFunc</span>(<span class="token-keyword">func</span>(w http.ResponseWriter, r *http.Request) {
+        
+        <span class="token-comment">// Rejeita conexões que não são do nosso ecossistema</span>
+        <span class="token-keyword">if</span> !security.<span class="token-func">ValidateHandshake</span>(r) {
+            http.<span class="token-func">Error</span>(w, <span class="token-string">"NXTA: Secure Handshake Required"</span>, 403)
+            <span class="token-keyword">return</span>
+        }
+
+        w.Header().<span class="token-func">Add</span>(<span class="token-string">"X-Server"</span>, <span class="token-string">"BrHTTP/1.0-Alpha"</span>)
+        w.Header().<span class="token-func">Add</span>(<span class="token-string">"X-Powered-By"</span>, <span class="token-string">"NXTA Engineering"</span>)
+        
+        next.<span class="token-func">ServeHTTP</span>(w, r)
+    })
+}</code></pre>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Performance vs. Controle</h2>
+            <p>
+                Em nossos benchmarks iniciais, o BrHTTP conseguiu servir conteúdo estático apenas <strong>12% mais lento</strong> que o Nginx ultra-otimizado. No entanto, em requisições dinâmicas que envolvem nossa lógica de negócio (Agro/Bio), ele foi <strong>40% mais rápido</strong>.
+            </p>
+            <p>
+                Por quê? Porque removemos camadas de abstração. O servidor web <em>é</em> a aplicação. Não há FastCGI, não há overhead de comunicação entre processos.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">O Futuro</h2>
+            <p>
+                O BrHTTP não será vendido como um produto isolado, mas é a espinha dorsal que torna o <a href="#" class="text-accent hover:underline">DeméterOne</a> e o <a href="#" class="text-accent hover:underline">Organizando.me</a> tão rápidos e seguros.
+            </p>
+            <p>
+                Na NXTA, nós descemos até o metal para garantir que o futuro seja construído sobre rocha sólida, não sobre dependências de terceiros.
+            </p>
+
+            <div class="pt-12 mt-12 border-t border-white/10">
+                <h4 class="text-xs font-bold text-slate-500 uppercase mb-4">Tags Relacionadas</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#GoLang</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#ServerDev</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Infraestrutura</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#ProprietaryTech</span>
+                </div>
+            </div>
+
+        </article>
+
+        <section class="max-w-3xl mx-auto px-4 mt-20">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 text-center border border-accent/20 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Gostou da engenharia?</h3>
+                <p class="text-slate-400 mb-8">
+                    Não enviamos spam. Apenas deep dives técnicos como este.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <input type="email" placeholder="seu@email.com" class="bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent w-full sm:w-auto">
+                    <button class="bg-accent text-black font-bold px-6 py-3 rounded-lg hover:bg-white transition-colors">
+                        Inscrever
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-white block mb-1">NXTA Engineering</span>
+                <span class="text-slate-500">Salvador, Bahia.</span>
+            </div>
+            
+            <div class="text-slate-500 text-center md:text-right">
+                <p>&copy; 2025 NXTA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Reading Progress Bar Logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("reading-progress").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>

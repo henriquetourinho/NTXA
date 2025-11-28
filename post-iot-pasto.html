@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>IoT no Pasto: O Desafio da Conectividade | NXTA Engineering Log</title>
+    <meta name="description" content="Como a NXTA arquitetou a telemetria do DeméterOne para funcionar em áreas remotas sem cobertura 4G, usando Mesh e Rust.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'nx-brand': '#00d4ff', 
+                        'nx-dark': '#020408',
+                        'nx-panel': '#0b1121',
+                        'nx-text': '#94a3b8',
+                        'accent': '#10b981', // VERDE (Agrotech Theme)
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.nx-text'),
+                                h1: { color: '#fff' },
+                                h2: { color: '#fff' },
+                                strong: { color: '#fff' },
+                                code: { color: theme('colors.accent') },
+                            },
+                        },
+                    }),
+                },
+            },
+        };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020408;
+            color: #94a3b8;
+        }
+        
+        /* Syntax Highlighting Manual (Rust Theme) */
+        .token-keyword { color: #c678dd; } /* pub, fn, struct */
+        .token-type { color: #e5c07b; }    /* u32, Vec, Option */
+        .token-fn { color: #61afef; }      /* function names */
+        .token-string { color: #98c379; }  /* strings */
+        .token-comment { color: #5c6370; font-style: italic; }
+        .token-macro { color: #d19a66; }   /* println!, vec! */
+        
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-nx-dark text-nx-text relative selection:bg-accent selection:text-black">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <div class="fixed top-0 left-0 h-1 bg-accent z-[60] w-0 transition-all duration-100" id="reading-progress"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="blog.html" class="flex items-center gap-2 group text-white hover:text-accent transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-bold text-sm tracking-wide">VOLTAR AO LOG</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-mono text-accent hidden sm:block">demeter_edge@nxta:~/telemetry</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <header class="max-w-3xl mx-auto px-4 sm:px-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="px-3 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                    Agrotech
+                </span>
+                <span class="text-slate-500 text-xs font-mono">15 NOV 2025</span>
+                <span class="text-slate-600 text-xs font-mono">•</span>
+                <span class="text-slate-500 text-xs font-mono">6 MIN READ</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
+                IoT no Pasto: <br>
+                O desafio da <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-green-200">conectividade rural</span>.
+            </h1>
+
+            <div class="flex items-center gap-4 border-b border-white/5 pb-8">
+                <div class="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border-2 border-nx-dark ring-2 ring-white/10">
+                    <img src="https://github.com/henriquetourinho.png" alt="Henrique Tourinho" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="text-white font-bold text-sm">Henrique Tourinho</p>
+                    <p class="text-slate-500 text-xs font-mono">CTO & Founder @ NXTA</p>
+                </div>
+            </div>
+        </header>
+
+        <article class="max-w-3xl mx-auto px-4 sm:px-6 text-lg leading-relaxed space-y-8">
+            
+            <p>
+                Conectar um servidor em um data center climatizado é trivial. Conectar um animal de 600kg que se move por vales, colinas e áreas de sombra de sinal no interior da Bahia é engenharia de verdade.
+            </p>
+            <p>
+                A maioria das soluções de "Agro 4.0" falha no Brasil por um motivo simples: elas assumem que o campo tem internet. <strong class="text-white">O DeméterOne assume que não tem.</strong>
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">O Problema da Topografia</h2>
+            <p>
+                O sinal 4G/5G é linear. Uma colina interrompe a comunicação. Se usássemos modems convencionais, perderíamos dados de telemetria crítica (parto, doença, roubo) em 40% do tempo.
+            </p>
+            <p>
+                Além disso, o custo energético de buscar rede celular drenaria a bateria dos sensores em dias. Precisávamos de uma arquitetura <em>Offline-First</em>.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Arquitetura Mesh & Store-and-Forward</h2>
+            <p>
+                Desenvolvemos um protocolo proprietário sobre LoRa (Long Range) que permite que os animais funcionem como "repetidores" uns dos outros. Se a vaca A não tem sinal, mas vê a vaca B (que vê a antena), o pacote de dados salta.
+            </p>
+            <blockquote class="border-l-4 border-accent pl-6 py-2 my-8 bg-accent/5 italic text-slate-300">
+                "Não enviamos JSON. No pasto, cada byte custa bateria. Criamos um protocolo binário que comprime 24h de dados de saúde em payloads minúsculos."
+            </blockquote>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Por que Rust no Embarcado?</h2>
+            <p>
+                C++ é o padrão, mas <strong>Rust</strong> nos dá a segurança de memória necessária para dispositivos que não podem ser reiniciados manualmente. Se o firmware falhar no meio do pasto, o custo operacional é altíssimo.
+            </p>
+            <p>
+                Abaixo, um exemplo simplificado de como gerenciamos o buffer de dados quando o animal está totalmente isolado (Store & Forward):
+            </p>
+
+            <div class="rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/10 my-8 shadow-2xl font-mono text-sm">
+                <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5">
+                    <span class="text-xs text-slate-400">firmware/telemetry.rs</span>
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                </div>
+                <div class="p-6 overflow-x-auto">
+<pre><code><span class="token-keyword">use</span> heapless::Vec;
+
+<span class="token-keyword">struct</span> <span class="token-type">TelemetryPacket</span> {
+    timestamp: <span class="token-type">u32</span>,
+    gps_lat: <span class="token-type">f32</span>,
+    gps_long: <span class="token-type">f32</span>,
+    activity_index: <span class="token-type">u8</span>, <span class="token-comment">// 0-255 (Repouso -> Stress)</span>
+}
+
+<span class="token-comment">// Armazena dados na memória flash se não houver LoRa</span>
+<span class="token-keyword">fn</span> <span class="token-fn">handle_telemetry</span>(sensor: &SensorData, radio: &mut LoRaRadio) {
+    <span class="token-keyword">let</span> packet = <span class="token-type">TelemetryPacket</span>::new(sensor);
+
+    <span class="token-keyword">match</span> radio.send(&packet) {
+        <span class="token-type">Ok</span>(_) => {
+            <span class="token-macro">println!</span>(<span class="token-string">"Packet sent immediately."</span>);
+        },
+        <span class="token-type">Err</span>(Error::NoNetwork) => {
+            <span class="token-comment">// Escrita segura na Flash (No-STD)</span>
+            flash_storage.<span class="token-fn">buffer</span>(packet).expect(<span class="token-string">"Flash full panic"</span>);
+            <span class="token-macro">println!</span>(<span class="token-string">"Offline mode: Data buffered."</span>);
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">O Resultado</h2>
+            <p>
+                Conseguimos reduzir o consumo de bateria em 60% comparado a soluções de mercado e garantimos que, mesmo que o animal fique 3 dias sem sinal, assim que ele entrar no raio de cobertura (ou cruzar com outro animal conectado), o histórico completo é sincronizado com a nuvem do <strong>DeméterOne</strong>.
+            </p>
+            <p>
+                Isso não é apenas rastreamento. É inteligência de borda aplicada onde ela é mais difícil de implementar.
+            </p>
+
+            <div class="pt-12 mt-12 border-t border-white/10">
+                <h4 class="text-xs font-bold text-slate-500 uppercase mb-4">Tags Relacionadas</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#RustLang</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#IoT</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#EmbeddedSystems</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Agrotech</span>
+                </div>
+            </div>
+
+        </article>
+
+        <section class="max-w-3xl mx-auto px-4 mt-20">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 text-center border border-accent/20 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Interessado em Hardware Hacking?</h3>
+                <p class="text-slate-400 mb-8">
+                    Inscreva-se para receber detalhes técnicos sobre nossas placas e firmware.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <input type="email" placeholder="seu@email.com" class="bg-black/40 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent w-full sm:w-auto">
+                    <button class="bg-accent text-black font-bold px-6 py-3 rounded-lg hover:bg-white transition-colors">
+                        Inscrever
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-white block mb-1">NXTA Engineering</span>
+                <span class="text-slate-500">Salvador, Bahia.</span>
+            </div>
+            
+            <div class="text-slate-500 text-center md:text-right">
+                <p>&copy; 2025 NXTA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Reading Progress Bar Logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("reading-progress").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>

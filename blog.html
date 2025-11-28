@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>NXTA Blog | Engineering & Intelligence</title>
+    <meta name="description" content="Artigos técnicos sobre Go, Rust, Python, Agrotech, Bio-Hacking e Infraestrutura Linux. O bastidor da engenharia da NXTA.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'], // Fonte de código
+                    },
+                    colors: {
+                        'nx-brand': '#00d4ff', 
+                        'nx-dark': '#020408',
+                        'nx-panel': '#0b1121',
+                        'nx-text': '#94a3b8',
+                        // Cores de Categorias (Sincronizadas com todo o site)
+                        'cat-infra': '#f59e0b',   // BrHTTP / Linux
+                        'cat-agro': '#10b981',    // Demeter
+                        'cat-bio': '#f43f5e',     // BioClock
+                        'cat-sec': '#ec4899',     // S.I.G.M.A (Forensics)
+                        'cat-fin': '#3b82f6',     // Organizando.me (Fintech)
+                        'cat-code': '#8b5cf6',    // Markdown (Dev)
+                    }
+                },
+            },
+        };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020408;
+            color: #94a3b8;
+        }
+        
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Glass Effect */
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .blog-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-nx-dark text-nx-text relative selection:bg-nx-brand selection:text-nx-dark">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="flex items-center gap-3 group text-white hover:text-nx-brand transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-bold tracking-wider text-sm">Voltar para NXTA</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-mono text-slate-500 hidden sm:block">/var/log/nxta</span>
+                    <a href="#" class="w-9 h-9 bg-white/5 rounded flex items-center justify-center text-white hover:bg-nx-brand hover:text-black transition-all">
+                        <i data-lucide="rss" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative z-10 pt-28 pb-20">
+        
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+            <h1 class="text-5xl md:text-7xl font-black text-white tracking-tight mb-4">
+                Engineering <span class="text-transparent bg-clip-text bg-gradient-to-r from-nx-brand to-purple-600">Logs</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl">
+                Deep dives em arquitetura de software, automação Linux e o desenvolvimento dos produtos proprietários da NXTA.
+            </p>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+            <div class="relative rounded-3xl overflow-hidden border border-white/10 group cursor-pointer hover:border-cat-infra/50 transition-colors">
+                <a href="post-brhttp.html" class="absolute inset-0 z-30"></a>
+
+                <div class="absolute inset-0 bg-gradient-to-r from-cat-infra/20 to-purple-900/40 z-0"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-nx-dark via-nx-dark/80 to-transparent z-10"></div>
+                
+                <div class="relative z-20 p-8 md:p-16 flex flex-col justify-end h-[500px]">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-3 py-1 rounded bg-cat-infra/20 text-cat-infra border border-cat-infra/20 text-xs font-mono font-bold uppercase">Infraestrutura</span>
+                        <span class="text-slate-400 text-xs font-mono">28 NOV 2025 • 8 MIN READ</span>
+                    </div>
+                    
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 group-hover:text-nx-brand transition-colors">
+                        A Morte do Nginx? Por que criamos o BrHTTP do zero em Go.
+                    </h2>
+                    
+                    <p class="text-lg text-slate-300 max-w-3xl mb-8 line-clamp-2">
+                        Para a maioria, o Nginx é suficiente. Para a NXTA, a soberania de dados exigia controle total. Veja como arquitetamos nosso próprio servidor web.
+                    </p>
+                    
+                    <div class="flex items-center gap-4 relative z-40">
+                        <a href="author.html" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                            <div class="w-10 h-10 rounded-full bg-gray-700 overflow-hidden border border-white/20">
+                                <img src="https://github.com/henriquetourinho.png" alt="Henrique" class="w-full h-full object-cover">
+                            </div>
+                            <div class="text-sm">
+                                <p class="text-white font-bold">Henrique Tourinho</p>
+                                <p class="text-slate-500 text-xs">CTO & Lead Engineer</p>
+                            </div>
+                        </a>
+                        <span class="text-nx-brand font-bold flex items-center gap-1 ml-auto group-hover:translate-x-2 transition-transform pointer-events-none">
+                            Ler Artigo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6 border-b border-white/5 pb-8">
+                <div class="flex flex-wrap gap-2">
+                    <button class="px-4 py-2 rounded-full bg-white text-black text-sm font-bold hover:bg-white/90 transition-colors">All</button>
+                    <button class="px-4 py-2 rounded-full bg-nx-panel border border-white/10 text-slate-300 text-sm hover:border-cat-sec hover:text-cat-sec transition-colors">Forensics</button>
+                    <button class="px-4 py-2 rounded-full bg-nx-panel border border-white/10 text-slate-300 text-sm hover:border-cat-fin hover:text-cat-fin transition-colors">Fintech</button>
+                    <button class="px-4 py-2 rounded-full bg-nx-panel border border-white/10 text-slate-300 text-sm hover:border-cat-agro hover:text-cat-agro transition-colors">Agrotech</button>
+                    <button class="px-4 py-2 rounded-full bg-nx-panel border border-white/10 text-slate-300 text-sm hover:border-cat-code hover:text-cat-code transition-colors">Dev & Code</button>
+                </div>
+
+                <div class="relative w-full md:w-64">
+                    <input type="text" placeholder="Buscar no log..." class="w-full bg-nx-panel border border-white/10 rounded-lg px-4 py-2 pl-10 text-sm text-white focus:outline-none focus:border-nx-brand transition-colors">
+                    <i data-lucide="search" class="absolute left-3 top-2.5 w-4 h-4 text-slate-500"></i>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <article class="glass-panel rounded-2xl overflow-hidden blog-card group relative hover:border-cat-sec">
+                    <a href="#" class="absolute inset-0 z-20"></a> <div class="h-48 bg-cat-sec/10 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-cat-sec/20 group-hover:scale-110 transition-transform duration-500">
+                            <i data-lucide="search-check" class="w-24 h-24"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                             <span class="px-2 py-1 rounded bg-black/50 backdrop-blur text-cat-sec border border-cat-sec/30 text-xs font-mono uppercase">Forensics</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-mono text-slate-500 mb-3">25 NOV 2025 • 5 MIN READ</div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cat-sec transition-colors">Investigação Profunda: GUI Linux com PySide6</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">
+                            Construindo interfaces gráficas performáticas em Python para indexar metadados sem congelar o SO.
+                        </p>
+                        <span class="text-white text-sm font-bold flex items-center gap-1 mt-auto">Ler mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-2xl overflow-hidden blog-card group relative hover:border-cat-fin">
+                    <a href="post-zero-trust.html" class="absolute inset-0 z-20"></a>
+                    <div class="h-48 bg-cat-fin/10 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-cat-fin/20 group-hover:scale-110 transition-transform duration-500">
+                            <i data-lucide="bar-chart-3" class="w-24 h-24"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                             <span class="px-2 py-1 rounded bg-black/50 backdrop-blur text-cat-fin border border-cat-fin/30 text-xs font-mono uppercase">Fintech</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-mono text-slate-500 mb-3">20 NOV 2025 • 4 MIN READ</div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cat-fin transition-colors">Segurança Zero Trust no Organizando.me</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">
+                            Criptografia ponta-a-ponta e autenticação multifator para proteger dados financeiros críticos.
+                        </p>
+                        <span class="text-white text-sm font-bold flex items-center gap-1 mt-auto">Ler mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-2xl overflow-hidden blog-card group relative hover:border-cat-agro">
+                    <a href="post-iot-pasto.html" class="absolute inset-0 z-20"></a>
+                    <div class="h-48 bg-cat-agro/10 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-cat-agro/20 group-hover:scale-110 transition-transform duration-500">
+                            <i data-lucide="sprout" class="w-24 h-24"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                             <span class="px-2 py-1 rounded bg-black/50 backdrop-blur text-cat-agro border border-cat-agro/30 text-xs font-mono uppercase">Agrotech</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-mono text-slate-500 mb-3">15 NOV 2025 • 6 MIN READ</div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cat-agro transition-colors">IoT no Pasto: O desafio da conectividade</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">
+                            Implementação de Mesh e Store-and-Forward em Rust para monitoramento de gado sem cobertura 4G.
+                        </p>
+                        <span class="text-white text-sm font-bold flex items-center gap-1 mt-auto">Ler mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-2xl overflow-hidden blog-card group relative hover:border-cat-bio">
+                    <a href="post-algoritmo-sono.html" class="absolute inset-0 z-20"></a>
+                    <div class="h-48 bg-cat-bio/10 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-cat-bio/20 group-hover:scale-110 transition-transform duration-500">
+                            <i data-lucide="activity" class="w-24 h-24"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                             <span class="px-2 py-1 rounded bg-black/50 backdrop-blur text-cat-bio border border-cat-bio/30 text-xs font-mono uppercase">Bio-Hacking</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-mono text-slate-500 mb-3">10 NOV 2025 • 7 MIN READ</div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cat-bio transition-colors">O Algoritmo do Sono</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">
+                            Traduzindo papers sobre ciclo circadiano em código Python para criar notificações preditivas.
+                        </p>
+                        <span class="text-white text-sm font-bold flex items-center gap-1 mt-auto">Ler mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-2xl overflow-hidden blog-card group relative hover:border-cat-code">
+                    <a href="post-markdown-brasil.html" class="absolute inset-0 z-20"></a>
+                    <div class="h-48 bg-cat-code/10 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-cat-code/20 group-hover:scale-110 transition-transform duration-500">
+                            <i data-lucide="github" class="w-24 h-24"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                             <span class="px-2 py-1 rounded bg-black/50 backdrop-blur text-cat-code border border-cat-code/30 text-xs font-mono uppercase">Open Source</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-mono text-slate-500 mb-3">05 NOV 2025 • 3 MIN READ</div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cat-code transition-colors">Markdown Brasil: Padronizando Documentação</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">
+                            Por que criamos um guia de estilo unificado para documentação técnica em PT-BR.
+                        </p>
+                        <span class="text-white text-sm font-bold flex items-center gap-1 mt-auto">Ler mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </article>
+
+                <article class="glass-panel rounded-2xl overflow-hidden blog-card group relative hover:border-cat-infra">
+                    <a href="post-automacao-debian.html" class="absolute inset-0 z-20"></a>
+                    <div class="h-48 bg-cat-infra/10 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center text-cat-infra/20 group-hover:scale-110 transition-transform duration-500">
+                            <i data-lucide="terminal" class="w-24 h-24"></i>
+                        </div>
+                        <div class="absolute top-4 left-4">
+                             <span class="px-2 py-1 rounded bg-black/50 backdrop-blur text-cat-infra border border-cat-infra/30 text-xs font-mono uppercase">Linux</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs font-mono text-slate-500 mb-3">01 NOV 2025 • 10 MIN READ</div>
+                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-cat-infra transition-colors">Automação de Servidores Debian com Shell</h3>
+                        <p class="text-slate-400 text-sm mb-6 flex-grow">
+                            Scripts essenciais para reduzir o tempo de setup de servidores de horas para minutos.
+                        </p>
+                        <span class="text-white text-sm font-bold flex items-center gap-1 mt-auto">Ler mais <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section class="max-w-4xl mx-auto px-4 mt-24">
+            <div class="glass-panel rounded-3xl p-10 text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-nx-brand/10 rounded-full blur-3xl -z-10"></div>
+                
+                <h2 class="text-3xl font-bold text-white mb-4">Stay Compiled.</h2>
+                <p class="text-slate-400 mb-8 max-w-lg mx-auto">
+                    Receba no seu e-mail apenas o suco da engenharia. Sem spam, apenas código, arquitetura e updates da NXTA.
+                </p>
+                
+                <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                    <input type="email" placeholder="seu@email.com" class="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-nx-brand">
+                    <button type="button" class="bg-white text-black font-bold px-6 py-3 rounded-lg hover:bg-nx-brand transition-colors">Inscrever</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-white text-lg block mb-1">NXTA Blog</span>
+                <span class="text-slate-500">Documentando o futuro.</span>
+            </div>
+            
+            <div class="text-slate-500 text-center md:text-right">
+                <p>&copy; <span id="year"></span> NXTA. Todos os direitos reservados.</p>
+                <a href="index.html" class="text-nx-brand hover:underline mt-2 inline-block">Voltar para Site Principal</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

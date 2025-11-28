@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Markdown Brasil: Padronizando a Documentação | NXTA Engineering Log</title>
+    <meta name="description" content="Por que decidimos criar um guia de estilo unificado para documentação técnica em PT-BR e como isso melhora a qualidade do software nacional.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        'nx-brand': '#00d4ff', 
+                        'nx-dark': '#020408',
+                        'nx-panel': '#0b1121',
+                        'nx-text': '#94a3b8',
+                        'accent': '#8b5cf6', // ROXO (Open Source/Code Theme)
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: {
+                            css: {
+                                color: theme('colors.nx-text'),
+                                h1: { color: '#fff' },
+                                h2: { color: '#fff' },
+                                strong: { color: '#fff' },
+                                code: { color: theme('colors.accent') },
+                            },
+                        },
+                    }),
+                },
+            },
+        };
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020408;
+            color: #94a3b8;
+        }
+        
+        /* Syntax Highlighting Manual (Markdown Theme) */
+        .token-heading { color: #e06c75; font-weight: bold; } /* # Header */
+        .token-link-text { color: #61afef; } /* [Link] */
+        .token-link-url { color: #5c6370; }  /* (http...) */
+        .token-code { color: #98c379; }      /* `code` */
+        .token-list { color: #d19a66; }      /* - Item */
+        .token-bold { color: #e5c07b; font-weight: bold; } /* **Bold** */
+        
+        .glass-panel {
+            background: rgba(11, 17, 33, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
+    </style>
+</head>
+
+<body class="bg-nx-dark text-nx-text relative selection:bg-accent selection:text-white">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
+
+    <div class="fixed top-0 left-0 h-1 bg-accent z-[60] w-0 transition-all duration-100" id="reading-progress"></div>
+
+    <header class="fixed top-0 z-50 w-full bg-nx-dark/90 backdrop-blur-md border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="blog.html" class="flex items-center gap-2 group text-white hover:text-accent transition-colors">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    <span class="font-bold text-sm tracking-wide">VOLTAR AO LOG</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-mono text-accent hidden sm:block">dev@nxta:~/docs/standards</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative z-10 pt-32 pb-20">
+        
+        <header class="max-w-3xl mx-auto px-4 sm:px-6 mb-12">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="px-3 py-1 rounded bg-accent/10 text-accent border border-accent/20 text-xs font-mono font-bold uppercase tracking-wider">
+                    Open Source
+                </span>
+                <span class="text-slate-500 text-xs font-mono">05 NOV 2025</span>
+                <span class="text-slate-600 text-xs font-mono">•</span>
+                <span class="text-slate-500 text-xs font-mono">3 MIN READ</span>
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-8">
+                Markdown Brasil: <br>
+                A busca pela <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-purple-200">documentação perfeita</span>.
+            </h1>
+
+            <div class="flex items-center gap-4 border-b border-white/5 pb-8">
+                <div class="w-12 h-12 rounded-full bg-gray-800 overflow-hidden border-2 border-nx-dark ring-2 ring-white/10">
+                    <img src="https://github.com/henriquetourinho.png" alt="Henrique Tourinho" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <p class="text-white font-bold text-sm">Henrique Tourinho</p>
+                    <p class="text-slate-500 text-xs font-mono">CTO & Founder @ NXTA</p>
+                </div>
+            </div>
+        </header>
+
+        <article class="max-w-3xl mx-auto px-4 sm:px-6 text-lg leading-relaxed space-y-8">
+            
+            <p>
+                Você já abriu um repositório no GitHub, viu um <code>README.md</code> vazio ou mal formatado e fechou a aba imediatamente? Você não está sozinho. 
+            </p>
+            <p>
+                Na <span class="text-white font-bold">NXTA</span>, acreditamos que código sem documentação é apenas ruído. Mas no Brasil, ainda carecemos de um padrão unificado. É aí que entra o projeto <strong>Markdown Brasil</strong>.
+            </p>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">A "ABNT" dos Desenvolvedores?</h2>
+            <p>
+                Não queremos burocracia. Queremos clareza. O Markdown Brasil nasceu para oferecer templates, snippets e guias de estilo que transformam um texto plano em uma experiência de leitura rica.
+            </p>
+            <blockquote class="border-l-4 border-accent pl-6 py-2 my-8 bg-accent/5 italic text-slate-300">
+                "Uma boa documentação é a diferença entre um projeto Open Source que morre e um que cria comunidade."
+            </blockquote>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Anatomia de um README Perfeito</h2>
+            <p>
+                Padronizar os cabeçalhos, badges e seções de instalação não apenas ajuda quem lê, mas agiliza quem escreve. Veja um exemplo da estrutura que defendemos:
+            </p>
+
+            <div class="rounded-xl overflow-hidden bg-[#1e1e1e] border border-white/10 my-8 shadow-2xl font-mono text-sm">
+                <div class="flex items-center justify-between px-4 py-2 bg-[#252526] border-b border-white/5">
+                    <span class="text-xs text-slate-400">README.md</span>
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                    </div>
+                </div>
+                <div class="p-6 overflow-x-auto">
+<pre><code><span class="token-heading"># Nome do Projeto</span>
+
+<span class="token-link-text">![Licença]</span><span class="token-link-url">(https://img.shields.io/badge/license-MIT-green)</span>
+<span class="token-link-text">![Versão]</span><span class="token-link-url">(https://img.shields.io/badge/version-1.0.0-blue)</span>
+
+Uma descrição concisa e poderosa do que o seu projeto faz e qual problema ele resolve.
+
+<span class="token-heading">## 🚀 Instalação</span>
+
+<span class="token-list">-</span> Pré-requisitos: <span class="token-code">`Python 3.11+`</span>
+
+<span class="token-code">```bash
+git clone [https://github.com/usuario/projeto.git](https://github.com/usuario/projeto.git)
+cd projeto
+pip install -r requirements.txt
+```</span>
+
+<span class="token-heading">## ☕ Como Usar</span>
+
+Explique como executar o projeto com exemplos claros.
+
+<span class="token-heading">## 🤝 Contribuição</span>
+
+Este projeto segue os padrões do <span class="token-link-text">[Markdown Brasil]</span><span class="token-link-url">(https://github.com/henriquetourinho/Markdown-Brasil)</span>.
+Leia o <span class="token-bold">CONTRIBUTING.md</span> antes de enviar seu PR.</code></pre>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-white mt-12 mb-4">Contribua com a Comunidade</h2>
+            <p>
+                O repositório do Markdown Brasil é um espaço colaborativo. Estamos compilando as melhores práticas de escrita técnica, hierarquia visual e acessibilidade em documentação.
+            </p>
+            <p>
+                Se você tem dicas sobre como documentar APIs, CLIs ou bibliotecas complexas, seu <em>Pull Request</em> é bem-vindo. Vamos elevar a barra da engenharia brasileira.
+            </p>
+
+            <div class="pt-12 mt-12 border-t border-white/10">
+                <h4 class="text-xs font-bold text-slate-500 uppercase mb-4">Tags Relacionadas</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#OpenSource</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Documentation</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#Community</span>
+                    <span class="px-3 py-1 rounded-full bg-white/5 text-slate-300 text-sm border border-white/10">#DevRel</span>
+                </div>
+            </div>
+
+        </article>
+
+        <section class="max-w-3xl mx-auto px-4 mt-20">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 text-center border border-accent/20 relative overflow-hidden">
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-accent/10 rounded-full blur-3xl -z-10"></div>
+                
+                <h3 class="text-2xl font-bold text-white mb-3">Melhore seu README hoje.</h3>
+                <p class="text-slate-400 mb-8">
+                    Acesse o repositório e baixe nossos templates gratuitos.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="https://github.com/henriquetourinho/Markdown-Brasil" target="_blank" class="bg-accent text-white font-bold px-8 py-3 rounded-lg hover:bg-white hover:text-accent transition-colors flex items-center gap-2 justify-center">
+                        <i data-lucide="github" class="w-5 h-5"></i> Acessar GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 bg-black border-t border-gray-900 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <span class="font-bold text-white block mb-1">NXTA Engineering</span>
+                <span class="text-slate-500">Salvador, Bahia.</span>
+            </div>
+            
+            <div class="text-slate-500 text-center md:text-right">
+                <p>&copy; 2025 NXTA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Reading Progress Bar Logic
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("reading-progress").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>
